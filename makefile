@@ -5,7 +5,7 @@ PROJECT_DIR := $(shell dirname $(FILE_PATH))
 PROJECT_NAME := $(notdir $(patsubst %/,%,$(dir $(FILE_PATH))))
 BUILD_DIR := "$(PROJECT_DIR)/cmake"
 
-.default: debug
+default: all
 
 debug:
 	@echo "FILE_PATH: $(FILE_PATH)"
@@ -13,14 +13,18 @@ debug:
 	@echo "PROJECT_NAME: $(PROJECT_NAME)"
 
 clean:
-	rm -rf "$(BUILD_DIR)"
+	@rm -rf "$(BUILD_DIR)"
 
 prepare:
-	mkdir -p "$(BUILD_DIR)"
-	(cd $(BUILD_DIR) && cmake ..)
+	@mkdir -p "$(BUILD_DIR)"
+	@(cd $(BUILD_DIR) && cmake ..)
 
 build:
-	make -C "$(BUILD_DIR)"
+	@make -C "$(BUILD_DIR)"
 
 run:
-	$(BUILD_DIR)/./JustOnce
+	@"$(BUILD_DIR)/./JustOnce"
+
+build-run: build run
+
+all: prepare build-run
