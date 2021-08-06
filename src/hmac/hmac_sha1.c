@@ -5,96 +5,98 @@
 */
 #include <string.h>
 #include <stdint.h>
-
-/*#ifdef USE_OPENSSL
-#include <openssl/sha.h>
-#include <openssl/hmac.h>
-#include <openssl/err.h>
-#else*/
-
 #include <sha/sha.h>
-
-/*#endif*/
-
 #include <hmac/hmac.h>
-
 
 /** SHA-1 Block size */
 #ifndef SHA_BLOCKSIZE
 #define SHA_BLOCKSIZE   (64)
 #endif
 
-
 /**
-* Function to compute the digest
-*
-* @param k   Secret key
-* @param lk  Length of the key in bytes
-* @param d   Data
-* @param ld  Length of data in bytes
-* @param out Digest output
-* @param t   Size of digest output
+* Generates HMAC from given data.
+* @param Secret Secret key.
+* @param SecretLength Lenght of the key.
+* @param Data Data to encode.
+* @param DataLength Size of the data given.
+* @param HMAC Generated HMAC.
+* @param HMACLength Size of the hash generated.
 */
-void CreateSHA1HMAC(const uint8_t *k,  /* secret key */
-        size_t lk,       /* length of the key in bytes */
-        const uint8_t *d,  /* data */
-        size_t ld,       /* length of data in bytes */
-        uint8_t *out,      /* output buffer, at least "t" bytes */
-        size_t *t) {
-    SHA_CTX ictx, octx;
-    uint8_t isha[SHA_DIGEST_LENGTH], osha[SHA_DIGEST_LENGTH];
-    uint8_t key[SHA_DIGEST_LENGTH];
-    uint8_t buf[SHA_BLOCKSIZE];
-    size_t i;
+void CreateSHA1HMAC(
+    const uint8_t *Secret,  /* secret key */
+    size_t SecretLength,       /* length of the key in bytes */
+    const uint8_t *Data,  /* data */
+    size_t DataLength,       /* length of data in bytes */
+    uint8_t *HMAC,      /* output buffer, at least "HMACLength" bytes */
+    size_t *HMACLength)
+{
+    if (SHA_BLOCKSIZE < SecretLength)
+    {
+        SHA_CTX KeyContext;
+        uint8_t KeyBuffer[SHA_DIGEST_LENGTH];
 
-    if (lk > SHA_BLOCKSIZE) {
-        SHA_CTX tctx;
+        SHA1_Init(&KeyContext);
+        SHA1_Update(&KeyContext, Secret, SecretLength);
+        SHA1_Final(KeyBuffer, &KeyContext);
 
-        SHA1_Init(&tctx);
-        SHA1_Update(&tctx, k, lk);
-        SHA1_Final(key, &tctx);
-
-        k = key;
-        lk = SHA_DIGEST_LENGTH;
+        Secret = KeyBuffer;
+        SecretLength = SHA_DIGEST_LENGTH;
     }
+
+    uint8_t InnerSHA[SHA_DIGEST_LENGTH], OuterSHA[SHA_DIGEST_LENGTH];
 
     /**** Inner Digest ****/
+    {
+        SHA_CTX InnerContext;
+        uint8_t BlockBuffer[SHA_BLOCKSIZE];
+        const uint8_t Flip = 0x36;
 
-    SHA1_Init(&ictx);
+        SHA1_Init(&InnerContext);
 
-    /* Pad the key for inner digest */
-    for (i = 0; i < lk; ++i) {
-        buf[i] = k[i] ^ 0x36;
+        /* Pad the key for inner digest */
+        for (size_t Index = 0; Index < SecretLength; ++Index) 
+        {
+            BlockBuffer[Index] = Secret[Index] ^ Flip;
+        }
+        for (size_t Index = SecretLength; Index < SHA_BLOCKSIZE; ++Index)
+        {
+            BlockBuffer[Index] = Flip;
+        }
+
+        SHA1_Update(&InnerContext, BlockBuffer, SHA_BLOCKSIZE);
+        SHA1_Update(&InnerContext, Data, DataLength);
+
+        SHA1_Final(InnerSHA, &InnerContext);
     }
-    for (i = lk; i < SHA_BLOCKSIZE; ++i) {
-        buf[i] = 0x36;
-    }
-
-    SHA1_Update(&ictx, buf, SHA_BLOCKSIZE);
-    SHA1_Update(&ictx, d, ld);
-
-    SHA1_Final(isha, &ictx);
 
     /**** Outer Digest ****/
+    {
+        SHA_CTX OuterContext;
+        uint8_t BlockBuffer[SHA_BLOCKSIZE];
+        const uint8_t Flip = 0x5c;
 
-    SHA1_Init(&octx);
+        SHA1_Init(&OuterContext);
 
-    /* Pad the key for outter digest */
+        /* Pad the key for outter digest */
+        for (size_t Index = 0; Index < SecretLength; ++Index)
+        {
+            BlockBuffer[Index] = Secret[Index] ^ Flip;
+        }
+        for (size_t Index = SecretLength; Index < SHA_BLOCKSIZE; ++Index)
+        {
+            BlockBuffer[Index] = Flip;
+        }
 
-    for (i = 0; i < lk; ++i) {
-        buf[i] = k[i] ^ 0x5c;
+        SHA1_Update(&OuterContext, BlockBuffer, SHA_BLOCKSIZE);
+        SHA1_Update(&OuterContext, InnerSHA, SHA_DIGEST_LENGTH);
+
+        SHA1_Final(OuterSHA, &OuterContext);
     }
-    for (i = lk; i < SHA_BLOCKSIZE; ++i) {
-        buf[i] = 0x5c;
-    }
-
-    SHA1_Update(&octx, buf, SHA_BLOCKSIZE);
-    SHA1_Update(&octx, isha, SHA_DIGEST_LENGTH);
-
-    SHA1_Final(osha, &octx);
 
     /* truncate and print the results */
-    *t = *t > SHA_DIGEST_LENGTH ? SHA_DIGEST_LENGTH : *t;
-    memcpy(out, osha, *t);
-/*#endif*/
+    *HMACLength = (SHA_DIGEST_LENGTH < *HMACLength)
+        ? SHA_DIGEST_LENGTH
+        : *HMACLength
+        ;
+    memcpy(HMAC, OuterSHA, *HMACLength);
 }
