@@ -28,4 +28,6 @@ void NormalizeKey(char** Key);
 
 int CalculateHOTP(const char* Key, int64_t Data, size_t Digits);
 
-char* MakeStringFromHOTP(int64_t Hash, size_t Digits);
+int VerifyHOTP(int64_t HTOP, const char* Key, int64_t Data, size_t Digits);
+
+char* MakeStringFromHOTP(int64_t HTOP, size_t Digits);

@@ -74,6 +74,8 @@ char* GenerateKeyFromSeed(const char* Seed)
     char* Secret = GenerateSecretFromSeed(Seed);
     char* Key = GenerateKeyFromSecret(Secret);
     free(Secret);
+
+    return Key;
 }
 
 char* GenerateKey()

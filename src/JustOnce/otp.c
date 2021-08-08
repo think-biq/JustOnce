@@ -156,13 +156,19 @@ int CalculateHOTP (const char* Key, int64_t Data, size_t Digits)
     return TruncadedHMAC;
 }
 
-char* MakeStringFromHOTP(int64_t Hash, size_t Digits)
+int VerifyHOTP(int64_t HTOP, const char* Key, int64_t Data, size_t Digits)
+{
+    int64_t ExpectedHTOP = CalculateHOTP(Key, Data, Digits);    
+    return ExpectedHTOP == HTOP;
+}
+
+char* MakeStringFromHOTP(int64_t HTOP, size_t Digits)
 {
     char FMT[7];
     snprintf(FMT, 7, (10 > Digits) ? "%%00%zuzu" : "%%0%zuzu", Digits);
 
     char* Buffer = malloc(Digits + 1);
-    snprintf(Buffer, Digits + 1, FMT, Hash);
+    snprintf(Buffer, Digits + 1, FMT, HTOP);
 
     return Buffer;
 }

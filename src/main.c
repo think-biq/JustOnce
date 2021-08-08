@@ -38,10 +38,7 @@ int main (void) {
         }
         else
         {
-            char* SeededSecret = GenerateSecretFromSeed(Seed);
-            printf("Secret: %s (Len: %lu)\n", SeededSecret, strlen(SeededSecret));
-            Key = GenerateKeyFromSecret(SeededSecret);
-            free(SeededSecret);
+            Key = GenerateKeyFromSeed(Seed);
         }
 
         if (NULL == Key)
