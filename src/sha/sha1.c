@@ -1,8 +1,7 @@
 /**
-* @file sha1.c SHA-1 in C
-*/
-
-/*
+* Public api for steve reid's public domain SHA-1 implementation.
+* This file is in the public domain / CC0 (if applicable).
+* 
 By Steve Reid <sreid@sea-to-sky.net>
 100% Public Domain
 

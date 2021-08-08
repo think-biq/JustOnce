@@ -1,3 +1,8 @@
+/*
+Apache License, Version 2.0
+Copyright (c) Paolo Stivanin
+*/
+
 #pragma once
 
 typedef enum _baseencode_errno {

@@ -1,3 +1,8 @@
+/*
+Apache License, Version 2.0
+Copyright (c) Paolo Stivanin
+*/
+
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>

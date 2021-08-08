@@ -1,5 +1,6 @@
 /**
-* @file re_sha.h  Interface to SHA (Secure Hash Standard) functions
+* Public api for Steve Reid's public domain SHA-1 implementation.
+* This file is in the public domain / CC0 (if applicable).
 *
 * Copyright (C) 2010 Creytiv.com
 */
@@ -11,8 +12,7 @@
 #include <openssl/sha.h>
 #else*/
 
-/* public api for steve reid's public domain SHA-1 implementation */
-/* this file is in the public domain */
+/*  */
 
 /** SHA-1 Context */
 typedef struct {
