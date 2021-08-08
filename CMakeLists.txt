@@ -6,7 +6,7 @@ file (GLOB JustOnce_SRC
 	"${PROJECT_SOURCE_DIR}/src/**/*.c")
 include_directories (
 	"${PROJECT_SOURCE_DIR}/src")
-add_library(JustOnce ${JustOnce_SRC})
+add_library(JustOnce SHARED ${JustOnce_SRC})
 
 
 file(GLOB JustOnce_Test_SRC	
