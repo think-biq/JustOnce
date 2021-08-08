@@ -22,9 +22,9 @@ prepare:
 build:
 	@make -C "$(BUILD_DIR)"
 
-run:
-	@"$(BUILD_DIR)/./JustOnce"
+run-test:
+	@"$(BUILD_DIR)/./JustOnceTest"
 
-build-run: build run
+build-run: build run-test
 
 all: prepare build-run
