@@ -66,7 +66,42 @@ void TestVerifyHOTP()
     }
 }
 
-void TestMakeStringFromHOTP()
+void TestCalculateTOTP()
+{
+    const char* Key = "GNUSLASHLINUX===================";
+    int Expected = 498977;
+    int Digits = 6;
+    int64_t Timestamp = 433512000;
+    int64_t Interval = 30;
+    const char* Name = "CalculateTOTP@06";
+
+    otp_error_t State;
+    int TOTP = CalculateTOTP(Key, Timestamp, Interval, Digits, &State);
+    if (VERBOSE) printf("%s finished with: %s\n", Name, GetErrorName(State));
+    Assert(sizeof(int), Name, TESTLY_EXIT_ON_FAIL, &Expected, &TOTP,
+        "Expected %i, got %i.", Expected, TOTP
+    );
+}
+
+void TestVerifyTOTP()
+{
+    const char* Key = "GNUSLASHLINUX===================";  
+    int TOTP = 498977;
+    int Digits = 6;
+    int64_t Timestamp = 433512000;
+    int64_t Interval = 30;
+    const char* Name = "VerifyTOTP@06";
+    int Expected = 1;
+
+    otp_error_t State;
+    int bVerfied = VerifyTOTP(TOTP, Key, Timestamp, Interval, Digits, &State);
+    if (VERBOSE) printf("%s finished with: %s\n", Name, GetErrorName(State));
+    Assert(sizeof(int), Name, TESTLY_EXIT_ON_FAIL, &Expected, &bVerfied,
+        "Expected %i, got %i.", Expected, bVerfied
+    );
+}
+
+void TestMakeStringFromOTP()
 {
     const char* ExpectedCodes[8] = {
                "001", 
@@ -83,9 +118,9 @@ void TestMakeStringFromHOTP()
     {
         const char* Expected = ExpectedCodes[Index];
         int Digits = 3 + Index;
-        int HMAC = 1;
+        int OTP = 1;
 
-        char* Code = MakeStringFromHOTP(HMAC, Digits);
+        char* Code = MakeStringFromOTP(OTP, Digits);
         Assert(0, "MakeStringFromHOTP", TESTLY_EXIT_ON_FAIL, Expected, Code,
             "Expected %s, got %s.", Expected, Code
         );

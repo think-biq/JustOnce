@@ -31,7 +31,7 @@ int main (void)
     RUN_TEST(TestNormalizeKey);
     RUN_TEST(TestGenerateSecretFromSeed);
     RUN_TEST(TestGenerateSecret);
-    RUN_TEST(TestGenerateSecretEntropy);
+    //RUN_TEST(TestGenerateSecretEntropy);
     RUN_TEST(TestGenerateKeyFromSecret);
     RUN_TEST(TestGenerateKey);
 
@@ -41,7 +41,9 @@ int main (void)
     RUN_TEST(TestToByteArray);
     RUN_TEST(TestCalculateHOTP);
     RUN_TEST(TestVerifyHOTP);
-    RUN_TEST(TestMakeStringFromHOTP);
+    RUN_TEST(TestCalculateTOTP);
+    RUN_TEST(TestVerifyTOTP);
+    RUN_TEST(TestMakeStringFromOTP);
 
     RUN_TEST(TestTiming);    
 

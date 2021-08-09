@@ -90,7 +90,7 @@ void TestGenerateSecretEntropy()
     int Expected = -1;
 
     Assert(sizeof(int), "FoundCollision", TESTLY_EXIT_ON_FAIL, &Expected, &CollisionIndex,
-        "Had collision on %i. generation.", CollisionIndex
+        "Had collision on %i. generation. (Very rare case)", CollisionIndex
     );
 }
 
