@@ -22,19 +22,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+#include "otp.h"
+
 #include <stdlib.h>
 #include <time.h>
-#include <stdint.h>
 #include <stdio.h>
-#include <string.h>
 #include <sha/sha.h>
 #include <baseencode/baseencode.h>
 #include "hmac.h"
 #include "timing.h"
 #include "misc.h"
-
-void ToByteArray(uint8_t* ByteArray, int64_t Data);
-
+#include "key.h"
 
 const char* CheckForError(int HMAC)
 {
@@ -60,40 +58,6 @@ const char* CheckForError(int HMAC)
     }
 
     return "UNKNOWN ERROR";
-}
-
-void NormalizeKey(char** Key)
-{
-    const size_t RequiredKeyLength = 32;
-    const size_t KeyLength = strlen(*Key);
-    const int MissingKeyCharacters = RequiredKeyLength - KeyLength;
-    if (0 < MissingKeyCharacters)
-    {
-        char Appendix[MissingKeyCharacters];
-        for (size_t Index = 0; Index < MissingKeyCharacters; ++Index)
-        {
-            Appendix[Index] = '=';
-        }
-
-        char* NewKey = malloc(RequiredKeyLength + 1);
-        strcat(NewKey, *Key);
-        strcat(NewKey, Appendix);
-        NewKey[RequiredKeyLength] = '\0';
-
-        free(*Key);
-        *Key = NewKey;
-    }
-    else if (0 > MissingKeyCharacters)
-    {        
-        char* NewKey = malloc(RequiredKeyLength + 1);
-        strncpy(NewKey, *Key, RequiredKeyLength);
-        NewKey[RequiredKeyLength] = '\0';
-
-        free(*Key);
-        *Key = NewKey;
-    }
-
-    ToUpperCase(Key);
 }
 
 int CalculateHOTP (const char* Key, int64_t Data, size_t Digits)

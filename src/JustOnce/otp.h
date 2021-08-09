@@ -22,6 +22,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+#include <stdint.h>
+#include <string.h>
+
+void ToByteArray(uint8_t* ByteArray, int64_t Data);
+
 const char* CheckForError(int HMAC);
 
 void NormalizeKey(char** Key);
