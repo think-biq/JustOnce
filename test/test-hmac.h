@@ -1,7 +1,7 @@
 
 
 #include <JustOnce/hmac.h>
-#include <sha/sha.h>
+#include <ShaOne/sha.h>
 
 /// hmac.h
 

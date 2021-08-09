@@ -28,7 +28,6 @@ SOFTWARE.
 #include "timing.h"
 #include "misc.h"
 #include "key.h"
-#include <sha/sha.h>
 #include <baseencode/baseencode.h>
 #include <stdlib.h>
 #include <time.h>

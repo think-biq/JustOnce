@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include <stdint.h>
 #include <string.h>
-#include <sha/sha.h>
+#include <ShaOne/sha.h>
 
 /** SHA-1 Block size */
 #ifndef SHA_BLOCKSIZE
