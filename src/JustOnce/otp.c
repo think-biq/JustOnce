@@ -24,15 +24,15 @@ SOFTWARE.
 
 #include "otp.h"
 
-#include <stdlib.h>
-#include <time.h>
-#include <stdio.h>
-#include <sha/sha.h>
-#include <baseencode/baseencode.h>
 #include "hmac.h"
 #include "timing.h"
 #include "misc.h"
 #include "key.h"
+#include <sha/sha.h>
+#include <baseencode/baseencode.h>
+#include <stdlib.h>
+#include <time.h>
+#include <stdio.h>
 
 #define SET_CHECKED(Pointer, Value) \
 { if (NULL != Pointer) *Pointer = Value; }

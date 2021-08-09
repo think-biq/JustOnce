@@ -24,6 +24,7 @@ SOFTWARE.
 
 #include <stdint.h>
 #include <string.h>
+#include <sha/sha.h>
 
 enum otp_error_t_
 {

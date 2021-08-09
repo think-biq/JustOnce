@@ -26,6 +26,8 @@ SOFTWARE.
 #define HMAC_H_
 
 #include <stdint.h>
+#include <string.h>
+#include <sha/sha.h>
 
 /** SHA-1 Block size */
 #ifndef SHA_BLOCKSIZE

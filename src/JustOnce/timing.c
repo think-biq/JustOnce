@@ -23,6 +23,7 @@ SOFTWARE.
 */
 
 #include "timing.h"
+
 #include <stdlib.h>
 #include <time.h>
 
