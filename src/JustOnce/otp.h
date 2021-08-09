@@ -29,8 +29,6 @@ void ToByteArray(uint8_t* ByteArray, int64_t Data);
 
 const char* CheckForError(int HMAC);
 
-void NormalizeKey(char** Key);
-
 int CalculateHOTP(const char* Key, int64_t Data, size_t Digits);
 
 int VerifyHOTP(int64_t HTOP, const char* Key, int64_t Data, size_t Digits);
