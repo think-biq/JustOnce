@@ -1,0 +1,3 @@
+[submodule "third-party/testly"]
+	path = third-party/testly
+	url = https://github.com/think-biq/testly
