@@ -36,9 +36,9 @@ enum otp_error_t_
 };
 typedef enum otp_error_t_ otp_error_t;
 
-void ToByteArray(uint8_t* ByteArray, int64_t Data);
+const char* GetErrorName(otp_error_t State);
 
-const char* CheckForError(int HMAC);
+void ToByteArray(uint8_t* ByteArray, int64_t Data);
 
 int CalculateHOTP(const char* Key, int64_t Data, size_t Digits, otp_error_t* State);
 

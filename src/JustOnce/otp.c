@@ -37,27 +37,28 @@ SOFTWARE.
 #define SET_CHECKED(Pointer, Value) \
 { if (NULL != Pointer) *Pointer = Value; }
 
-const char* CheckForError(int HMAC)
+const char* GetErrorName(otp_error_t State)
 {
-    if (0 < HMAC)
+    switch(State)
     {
+    case OTP_SUCCESS:
         return "SUCCESS";
-    }
-
-    switch(HMAC)
-    {
-    case -1:
-        return "INVALID KEY POINTER";
         break;
-    case -2:
-        return "INVALID KEY LENGTH";
+    case OTP_KEY_NULL:
+        return "KEY IS NULL";
         break;
-    case -3:
-        return "INVALID DIGIT LENGTH";
+    case OTP_KEY_LENGTH_INVALID:
+        return "KEY LENGTH IS NOT 32";
         break;
-    case -4:
-        return "INVALID KEY ENCODING";
+    case OTP_KEY_DECODE_ERROR:
+        return "KEY COULD NOT BE DECODED FROM BASE32";
         break;
+    case OTP_DIGITS_INVALID:
+        return "DIGITS WAS NOT BETWEEN 3 AND 10";
+        break;
+    case OTP_HMAC_ERROR:
+        return "HMAC CREATION FAILED";
+        break;        
     }
 
     return "UNKNOWN ERROR";
