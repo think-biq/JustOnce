@@ -4,6 +4,7 @@ FILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 PROJECT_DIR := $(shell dirname $(FILE_PATH))
 PROJECT_NAME := $(notdir $(patsubst %/,%,$(dir $(FILE_PATH))))
 BUILD_DIR := "$(PROJECT_DIR)/staging"
+BUILD_TEST_FLAG := -D JustOnce_WithTest=0
 
 default: all
 
@@ -17,13 +18,13 @@ clean:
 
 prepare:
 	@mkdir -p "$(BUILD_DIR)"
-	@(cd $(BUILD_DIR) && cmake ..)
+	@(cd $(BUILD_DIR) && cmake ${BUILD_TEST_FLAG} ..)
 
 build:
 	@make -C "$(BUILD_DIR)"
 
 run-test:
-	@"$(BUILD_DIR)/./JustOnceTest"
+	@(test -f "$(BUILD_DIR)/JustOnceTes" && "$(BUILD_DIR)/./JustOnceTes" ) || echo Skipping test ...
 
 build-run: build run-test
 

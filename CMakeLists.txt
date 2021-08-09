@@ -2,6 +2,9 @@ CMAKE_MINIMUM_REQUIRED (VERSION 3.19)
 
 project (JustOnce)
 
+add_subdirectory(third-party/ShaOne)
+include_directories(third-party/ShaOne/src)
+
 file (GLOB JustOnce_SRC
 	"${PROJECT_SOURCE_DIR}/src/**/*.c")
 file (GLOB JustOnce_ThirdParty_SRC
@@ -10,11 +13,9 @@ include_directories (
 	"${PROJECT_SOURCE_DIR}/src"
 	"${PROJECT_SOURCE_DIR}/third-party")
 add_library(JustOnce SHARED ${JustOnce_SRC} ${JustOnce_ThirdParty_SRC})
+target_link_libraries(JustOnce ShaOne)
 
-add_subdirectory(third-party/ShaOne)
-include_directories(third-party/ShaOne/src)
-
-if (JustOnce_WithTest)
+if (JustOnce_WithTest EQUAL 1)
 	if (NOT Testly)
 		add_subdirectory(third-party/testly)
 		include_directories(third-party/testly/src)
