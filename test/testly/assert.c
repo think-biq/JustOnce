@@ -35,7 +35,6 @@ void VFail(const char* Name, int bExitOnFail, const char* FailFMT, va_list FailA
 
     char FMT[strlen(FailFMT) + 1 + 1];
     sprintf(FMT, "%s\n", FailFMT);
-
     vfprintf(stdout, FMT, FailArgs); // Special case for varadic args.
     
     if (0 != bExitOnFail)
@@ -62,7 +61,6 @@ void Assert(int DataSize, const char* Name, int bExitOnFail, const void* Expecte
     {
         va_list VarArgs;
         va_start(VarArgs, FailFMT);
-        printf("Fail\n");
         if (NULL == Name)
         {
             VFail("NULL", bExitOnFail, FailFMT, VarArgs);

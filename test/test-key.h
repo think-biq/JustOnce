@@ -45,6 +45,55 @@ void TestGenerateSecret()
     free(Secret);
 }
 
+void TestGenerateSecretEntropy()
+{
+    // Deactivates crypto safe rand (to be deterministic for tests).
+    SetRandomizerSafe(1); 
+    // Resets seed to 0.
+    SetRandomizerSeed(time(NULL));
+
+    const size_t SampleSize = 2000;
+    char* Collection[SampleSize];
+
+    for (size_t Index = 0; Index < SampleSize; ++Index)
+    {
+        Collection[Index] = GenerateSecret();
+    }
+
+    int CollisionIndex = -1;
+    for (size_t Index = 0; Index < SampleSize; ++Index)
+    {
+        char* Reference = Collection[Index];
+        for (size_t InnerIndex = 0; InnerIndex < SampleSize; ++InnerIndex)
+        {
+            if (Index == InnerIndex) continue;
+
+            char* Sample = Collection[InnerIndex];
+            if (0 == strcmp(Reference, Sample))
+            {
+                CollisionIndex = InnerIndex;
+                break;
+            }
+        }
+
+        if (-1 < CollisionIndex)
+        {
+            break;
+        }
+    }
+
+    for (size_t Index = 0; Index < SampleSize; ++Index)
+    {
+        free(Collection[Index]);
+    }
+
+    int Expected = -1;
+
+    Assert(sizeof(int), "FoundCollision", TESTLY_EXIT_ON_FAIL, &Expected, &CollisionIndex,
+        "Had collision on %i. generation.", CollisionIndex
+    );
+}
+
 void TestGenerateKeyFromSecret()
 {
     const char* Secret = "DEADCAFEBABE13372DEF";
