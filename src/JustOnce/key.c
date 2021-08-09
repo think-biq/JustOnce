@@ -1,11 +1,28 @@
 
 #include "key.h"
 
+#include "misc.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <baseencode/baseencode.h>
-#include "misc.h"
+
+static int Global_bUseSafeRand = 1;
+
+void SetRandomizerSafe(int bUseSafeRand)
+{
+    Global_bUseSafeRand = bUseSafeRand;
+}
+
+int GetRandomNumber()
+{
+    return Global_bUseSafeRand ? arc4random() : rand();
+}
+
+void SetRandomizerSeed(int Seed)
+{
+    srand(Seed);
+}
 
 void NormalizeKey(char** Key)
 {
@@ -68,18 +85,31 @@ char* GenerateSecretFromSeed(const char* Seed)
 
 char* GenerateSecret()
 {
-    /*
     static const int RequiredSize = 10;
 
-    int Catch = FMath::Rand();
-    int Ball = FMath::Rand() + Catch;
-    FString Base = FString::Printf(TEXT("%05d"), Catch);
-    Base.Append(FString::Printf(TEXT("%05d"), Ball));
+    int Catch = GetRandomNumber();
+    int Ball = GetRandomNumber();
 
-    FString Seed = Base.Right(RequiredSize);
-    GenerateKeyFromSeed(bValid, Key, Seed);
-    */
-    return NULL;
+    char* Base = calloc(1, 5 + 1);
+    snprintf(Base, 6, "%05d", Catch);
+    Base[5] = '\0';
+
+    char* Tail = calloc(1, 5 + 1);
+    snprintf(Tail, 6, "%05d", Ball);
+    Tail[5] = '\0';
+
+    char* Seed = calloc(1, 5 + 5 + 1);
+    snprintf(Seed, 11, "%s%s", Base, Tail);
+    Seed[5 + 5] = '\0';
+
+    free(Base);
+    free(Tail);
+
+    char* Secret = GenerateSecretFromSeed(Seed);
+    if (NULL != Secret)
+        free(Seed);
+
+    return Secret;
 }
 
 char* GenerateKeyFromSecret(const char* Secret)
@@ -110,5 +140,9 @@ char* GenerateKeyFromSeed(const char* Seed)
 
 char* GenerateKey()
 {
-    return NULL;
+    char* Secret = GenerateSecret();
+    char* Key = GenerateKeyFromSecret(Secret);
+    free(Secret);
+
+    return Key;
 }
