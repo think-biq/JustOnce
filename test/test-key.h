@@ -47,9 +47,8 @@ void TestGenerateSecret()
 
 void TestGenerateKeyFromSecret()
 {
-    /*const char* Secret = "CAFEBABECAFEBABECAFE";*/
-    const char* Secret = "00000000000000000000";
-    const char* Expected = "GAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQ";
+    const char* Secret = "DEADCAFEBABE13372DEF";
+    const char* Expected = "IRCUCRCDIFDEKQSBIJCTCMZTG4ZEIRKG";
 
     char* Key = GenerateKeyFromSecret(Secret);
     Assert(0, "GenerateKeyFromSecret", TESTLY_EXIT_ON_FAIL, Expected, Key,
