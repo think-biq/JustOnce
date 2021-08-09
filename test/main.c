@@ -9,11 +9,11 @@
 #include <string.h>
 #include <stdarg.h>
 #include <time.h>
+
 #include <JustOnce/otp.h>
 #include <JustOnce/timing.h>
 #include <JustOnce/key.h>
 #include <JustOnce/misc.h>
-#include <sha/sha.h>
 
 #define VERBOSE 0
 
