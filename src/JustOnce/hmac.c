@@ -122,7 +122,11 @@ int TruncateHMAC(const uint8_t* HMAC, size_t Digits)
       | ((HMAC[Offset + 3] & 0xff))
       ;
 
+    size_t SafeDigits = (Digits > 10)
+        ? 10
+        : Digits
+        ;
     // Cut of excess digits, depending on desired length.
-    int TruncadedHMAC = BinaryCode % DIGITS_POWER[Digits];
+    int TruncadedHMAC = BinaryCode % DIGITS_POWER[SafeDigits];
     return TruncadedHMAC;
 }
