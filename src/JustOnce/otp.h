@@ -40,8 +40,12 @@ const char* GetErrorName(otp_error_t State);
 
 void ToByteArray(uint8_t* ByteArray, int64_t Data);
 
-int CalculateHOTP(const char* Key, int64_t Data, size_t Digits, otp_error_t* State);
+int CalculateHOTP(const char* Key, int64_t Counter, size_t Digits, otp_error_t* State);
 
-int VerifyHOTP(int64_t HTOP, const char* Key, int64_t Data, size_t Digits, otp_error_t* State);
+int VerifyHOTP(int64_t HTOP, const char* Key, int64_t Counter, size_t Digits, otp_error_t* State);
 
-char* MakeStringFromHOTP(int64_t HTOP, size_t Digits);
+int CalculateTOTP(const char* Key, int64_t Timestamp, int64_t Interval, size_t Digits, otp_error_t* State);
+
+int VerifyTOTP(int64_t TOTP, const char* Key, int64_t Timestamp, int64_t Interval, size_t Digits,  otp_error_t* State);
+
+char* MakeStringFromOTP(int64_t HTOP, size_t Digits);

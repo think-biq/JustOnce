@@ -64,7 +64,7 @@ const char* GetErrorName(otp_error_t State)
     return "UNKNOWN ERROR";
 }
 
-int CalculateHOTP(const char* Key, int64_t Data, size_t Digits, otp_error_t* State)
+int CalculateHOTP(const char* Key, int64_t Counter, size_t Digits, otp_error_t* State)
 {
     if (NULL == Key)
     {
@@ -97,11 +97,11 @@ int CalculateHOTP(const char* Key, int64_t Data, size_t Digits, otp_error_t* Sta
     size_t SecretLengthHMAC = strlen((char*)SecretHMAC);
     
     // Convert long integer into byte array (reverse byte order).
-    uint8_t DataAsReversedByteArray[sizeof(Data)];
-    ToByteArray(DataAsReversedByteArray, Data);
+    uint8_t DataAsReversedByteArray[sizeof(Counter)];
+    ToByteArray(DataAsReversedByteArray, Counter);
 
     // Actually create the HMAC.
-    int Truncated;
+    int HOTP;
     {
         unsigned char HMAC[SHA1_DIGEST_SIZE];
         size_t ActualHMACLength = CreateHMAC(HMAC,
@@ -115,27 +115,40 @@ int CalculateHOTP(const char* Key, int64_t Data, size_t Digits, otp_error_t* Sta
 
         if (SHA1_DIGEST_SIZE != ActualHMACLength)
         {
+            HOTP = -1;
             SET_CHECKED(State, OTP_HMAC_ERROR);
-            Truncated = -1;
         }
         else
         {
             // Cut of excess digits.
-            Truncated = TruncateHMAC(HMAC, Digits);            
+            HOTP = TruncateHMAC(HMAC, Digits);
+            SET_CHECKED(State, OTP_SUCCESS);
         }
     }
 
-    SET_CHECKED(State, OTP_SUCCESS);
-    return Truncated;
+    return HOTP;
 }
 
-int VerifyHOTP(int64_t HTOP, const char* Key, int64_t Data, size_t Digits,  otp_error_t* State)
+int VerifyHOTP(int64_t HTOP, const char* Key, int64_t Counter, size_t Digits,  otp_error_t* State)
 {
-    int ExpectedHTOP = CalculateHOTP(Key, Data, Digits, State);
-    return ExpectedHTOP == HTOP;
+    int ExpectedHOTP = CalculateHOTP(Key, Counter, Digits, State);
+    return ExpectedHOTP == HTOP;
 }
 
-char* MakeStringFromHOTP(int64_t HTOP, size_t Digits)
+int CalculateTOTP(const char* Key, int64_t Timestamp, int64_t Interval, size_t Digits, otp_error_t* State)
+{
+    int64_t Period = Timestamp / Interval;
+    int TOTP = CalculateHOTP(Key, Period, Digits, State);
+    return TOTP;
+}
+
+int VerifyTOTP(int64_t TOTP, const char* Key, int64_t Timestamp, int64_t Interval, size_t Digits,  otp_error_t* State)
+{
+    int ExpectedTOTP = CalculateTOTP(Key, Timestamp, Interval, Digits, State);
+    return ExpectedTOTP == TOTP;
+}
+
+char* MakeStringFromOTP(int64_t HTOP, size_t Digits)
 {
     char FMT[7];
     snprintf(FMT, 7, (10 > Digits) ? "%%00%zuzu" : "%%0%zuzu", Digits);
