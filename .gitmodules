@@ -1,3 +1,6 @@
 [submodule "third-party/testly"]
 	path = third-party/testly
 	url = https://github.com/think-biq/testly
+[submodule "third-party/ShaOne"]
+	path = third-party/ShaOne
+	url = https://github.com/think-biq/ShaOne
