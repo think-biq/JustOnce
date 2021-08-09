@@ -31,7 +31,7 @@ void TestCalculateHOTP()
         char Name[17];
         sprintf(Name, "CalculateHOTP@%02i", Digits);
 
-        int HOTP = CalculateHOTP(Key, 0, Digits);
+        int HOTP = CalculateHOTP(Key, 0, Digits, NULL);
         Assert(sizeof(int), Name, TESTLY_EXIT_ON_FAIL, &Expected, &HOTP,
             "Expected %i, got %i.", Expected, HOTP
         );
@@ -54,7 +54,7 @@ void TestVerifyHOTP()
         char Name[14];
         sprintf(Name, "VerifyHOTP@%02i", Digits);
 
-        int Verified = VerifyHOTP(HOTP, Key, 0, Digits);
+        int Verified = VerifyHOTP(HOTP, Key, 0, Digits, NULL);
         Assert(sizeof(int), Name, TESTLY_EXIT_ON_FAIL, &Expected, &Verified,
             "Expected %i, got %i.", Expected, Verified
         );

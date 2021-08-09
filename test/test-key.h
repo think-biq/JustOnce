@@ -6,12 +6,13 @@ void TestNormalizeKey()
 {
     const char* KeyReference = "HELLO";
     const char* Expected = "HELLO===========================";
-
     char* Key = strdup(KeyReference);
+
     NormalizeKey(&Key);
     Assert(0, "NormalizeKey", TESTLY_EXIT_ON_FAIL, Expected, Key,
         "Expected %s, got %s.", Expected, Key
     );
+    
     free(Key);
 }
 
