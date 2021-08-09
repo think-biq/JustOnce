@@ -32,6 +32,6 @@ char* MakeUpperCase(const char* String);
 
 void ToUpperCase(char** String);
 
-char* Hexify(uint8_t* Buffer, size_t Count);
+char* Hexify(const uint8_t* Buffer, size_t Count);
 
 #endif

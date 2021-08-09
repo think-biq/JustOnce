@@ -36,7 +36,7 @@ void ToUpperCase(char** String)
     }	
 }
 
-char* Hexify(uint8_t* Buffer, size_t Count)
+char* Hexify(const uint8_t* Buffer, size_t Count)
 {
     if (NULL == Buffer)
     {
