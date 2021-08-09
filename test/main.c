@@ -12,7 +12,9 @@
 #include <JustOnce/hmac.h>
 #include <sha/sha.h>
 
-#include "testly.h"
+#undef TESTLY_ASSERT_DISABLED
+#include "testly/assert.h"
+#include "testly/run.h"
 
 #define VERBOSE 0
 

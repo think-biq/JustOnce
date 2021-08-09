@@ -1,6 +1,5 @@
 
-#ifndef TESTLY_H_
-#define TESTLY_H_
+#include "assert.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -8,18 +7,8 @@
 #include <string.h>
 #include <stdarg.h>
 
-#define RUN_TEST(Name) \
-{ \
-    Name(); \
-    fprintf(stdout, "\033[0;32m"); \
-    fprintf(stdout, "Passed: "); \
-    fprintf(stdout, "\033[0m"); \
-    fprintf(stdout, "%s.\n", #Name); \
-}
-
 void Assert(int DataSize, const char* Name, const void* Expected, const void* Actual, const char* FailFMT, ...)
 {
-#ifndef ASSERT_DISABLED
     int HasError;
 
     if (0 == DataSize)
@@ -48,7 +37,4 @@ void Assert(int DataSize, const char* Name, const void* Expected, const void* Ac
         
         exit(1);
     }
-#endif
 }
-
-#endif
