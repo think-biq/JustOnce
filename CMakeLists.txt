@@ -5,6 +5,9 @@ project (JustOnce)
 add_subdirectory(third-party/ShaOne)
 include_directories(third-party/ShaOne/src)
 
+add_subdirectory(third-party/libbaseencode)
+include_directories(third-party/libbaseencode/src)
+
 file (GLOB JustOnce_SRC
 	"${PROJECT_SOURCE_DIR}/src/**/*.c")
 file (GLOB JustOnce_ThirdParty_SRC
@@ -13,7 +16,7 @@ include_directories (
 	"${PROJECT_SOURCE_DIR}/src"
 	"${PROJECT_SOURCE_DIR}/third-party")
 add_library(JustOnce SHARED ${JustOnce_SRC} ${JustOnce_ThirdParty_SRC})
-target_link_libraries(JustOnce ShaOne)
+target_link_libraries(JustOnce ShaOne baseencode)
 
 if (JustOnce_WithTest)
 	if (NOT Testly)

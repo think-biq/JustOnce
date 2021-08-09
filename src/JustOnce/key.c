@@ -5,7 +5,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <baseencode/baseencode.h>
+#include <baseencode.h>
 
 static int Global_bUseSafeRand = 1;
 

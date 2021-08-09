@@ -28,7 +28,7 @@ SOFTWARE.
 #include "timing.h"
 #include "misc.h"
 #include "key.h"
-#include <baseencode/baseencode.h>
+#include <baseencode.h>
 #include <stdlib.h>
 #include <time.h>
 #include <stdio.h>
