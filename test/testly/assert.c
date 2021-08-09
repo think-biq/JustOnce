@@ -7,7 +7,26 @@
 #include <string.h>
 #include <stdarg.h>
 
-void Assert(int DataSize, const char* Name, const void* Expected, const void* Actual, const char* FailFMT, ...)
+void Fail(const char* Name, int bExitOnFail, const char* FailFMT, ...)
+{
+    fprintf(stdout, "\033[0;31m");
+    fprintf(stdout, "Failed: ");
+    fprintf(stdout, "\033[0m"); // Reset color.
+    fprintf(stdout, "%s.\n\t", Name);
+
+    char FMT[strlen(FailFMT) + 1 + 1];
+    sprintf(FMT, "%s\n", FailFMT);
+
+    va_list VarArgs;
+    va_start(VarArgs, FailFMT);
+    vfprintf(stdout, FMT, VarArgs); // Special case for varadic args.
+    va_end(VarArgs);
+    
+    if (0 != bExitOnFail)
+        exit(1);
+}
+
+void Assert(int DataSize, const char* Name, int bExitOnFail, const void* Expected, const void* Actual, const char* FailFMT, ...)
 {
     int HasError;
 
@@ -21,20 +40,10 @@ void Assert(int DataSize, const char* Name, const void* Expected, const void* Ac
     }
 
     if (0 != HasError)
-    {        
-        fprintf(stdout, "\033[0;31m");
-        fprintf(stdout, "Failed: ");
-        fprintf(stdout, "\033[0m"); // Reset color.
-        fprintf(stdout, "%s.\n\t", Name);
-
-        char FMT[strlen(FailFMT) + 1 + 1];
-        sprintf(FMT, "%s\n", FailFMT);
-
+    {
         va_list VarArgs;
         va_start(VarArgs, FailFMT);
-        vfprintf(stdout, FMT, VarArgs); // Special case for varadic args.
+        Fail(Name, bExitOnFail, FailFMT, VarArgs); // Special case for varadic args.
         va_end(VarArgs);
-        
-        exit(1);
     }
 }
