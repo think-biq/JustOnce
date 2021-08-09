@@ -4,3 +4,6 @@
 [submodule "third-party/ShaOne"]
 	path = third-party/ShaOne
 	url = https://github.com/think-biq/ShaOne
+[submodule "third-party/libbaseencode"]
+	path = third-party/libbaseencode
+	url = https://github.com/think-biq/libbaseencode
