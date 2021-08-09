@@ -30,7 +30,19 @@ void TestGenerateSecretFromSeed()
 
 void TestGenerateSecret()
 {
-    Fail("TestGenerateSecret", TESTLY_EXIT_ON_FAIL, "Not implemented yet!");
+    // Deactivates crypto safe rand (to be deterministic for tests).
+    SetRandomizerSafe(0); 
+    // Resets seed to 0.
+    SetRandomizerSeed(0);
+
+    const char* Expected = "35323039333238393235";
+
+    char* Secret = GenerateSecret();
+    Assert(0, "GenerateSecret", TESTLY_EXIT_ON_FAIL, Expected, Secret,
+        "Expected %s, got %s.", Expected, Secret
+    );
+
+    free(Secret);
 }
 
 void TestGenerateKeyFromSecret()
@@ -48,5 +60,17 @@ void TestGenerateKeyFromSecret()
 
 void TestGenerateKey()
 {
-    Fail("TestGenerateKey", TESTLY_EXIT_ON_FAIL, "Not implemented yet!");
+    // Deactivates crypto safe rand (to be deterministic for tests).
+    SetRandomizerSafe(0); 
+    // Resets seed to 0.
+    SetRandomizerSeed(0);
+
+    const char* Expected = "GM2TGMRTGAZTSMZTGMZDGOBTHEZTEMZV";
+       
+    char* Key = GenerateKey();
+    Assert(0, "GenerateKeyFromSecret", TESTLY_EXIT_ON_FAIL, Expected, Key,
+        "Expected %s, got %s.", Expected, Key
+    );
+
+    free(Key);
 }

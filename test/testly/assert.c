@@ -17,10 +17,26 @@ void Fail(const char* Name, int bExitOnFail, const char* FailFMT, ...)
     char FMT[strlen(FailFMT) + 1 + 1];
     sprintf(FMT, "%s\n", FailFMT);
 
-    va_list VarArgs;
-    va_start(VarArgs, FailFMT);
-    vfprintf(stdout, FMT, VarArgs); // Special case for varadic args.
-    va_end(VarArgs);
+    va_list FailArgs;
+    va_start(FailArgs, FailFMT);
+    vfprintf(stdout, FMT, FailArgs); // Special case for varadic args.
+    va_end(FailArgs);
+    
+    if (0 != bExitOnFail)
+        exit(1);
+}
+
+void VFail(const char* Name, int bExitOnFail, const char* FailFMT, va_list FailArgs)
+{
+    fprintf(stdout, "\033[0;31m");
+    fprintf(stdout, "Failed: ");
+    fprintf(stdout, "\033[0m"); // Reset color.
+    fprintf(stdout, "%s.\n\t", Name);
+
+    char FMT[strlen(FailFMT) + 1 + 1];
+    sprintf(FMT, "%s\n", FailFMT);
+
+    vfprintf(stdout, FMT, FailArgs); // Special case for varadic args.
     
     if (0 != bExitOnFail)
         exit(1);
@@ -28,22 +44,33 @@ void Fail(const char* Name, int bExitOnFail, const char* FailFMT, ...)
 
 void Assert(int DataSize, const char* Name, int bExitOnFail, const void* Expected, const void* Actual, const char* FailFMT, ...)
 {
-    int HasError;
+    int HasError = 1;
 
-    if (0 == DataSize)
+    if (NULL != Expected && NULL != Actual)
     {
-        HasError = strcmp((const char*)Expected, (const char*)Actual);
-    }
-    else
-    {
-        HasError = memcmp(Expected, Actual, DataSize);
+        if (0 == DataSize)
+        {
+            HasError = strcmp((const char*)Expected, (const char*)Actual);
+        }
+        else
+        {
+            HasError = memcmp(Expected, Actual, DataSize);
+        }     
     }
 
     if (0 != HasError)
     {
         va_list VarArgs;
         va_start(VarArgs, FailFMT);
-        Fail(Name, bExitOnFail, FailFMT, VarArgs); // Special case for varadic args.
+        printf("Fail\n");
+        if (NULL == Name)
+        {
+            VFail("NULL", bExitOnFail, FailFMT, VarArgs);
+        }
+        else
+        {
+            VFail(Name, bExitOnFail, FailFMT, VarArgs);
+        }
         va_end(VarArgs);
-    }
+    }   
 }
