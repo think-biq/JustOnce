@@ -59,15 +59,7 @@ char* GenerateSecretFromSeed(const char* Seed)
         return NULL;
     }
 
-    char* Secret = malloc(RelevantSeedLength*2 + 1);
-    for (size_t DataIndex = 0; DataIndex < RelevantSeedLength; ++DataIndex)
-    {
-        const char DataPart = Seed[DataIndex];
-        char HexValue[3];
-        snprintf(HexValue, 3, "%02x", DataPart);
-        strcat(Secret, HexValue);
-    }
-    Secret[RelevantSeedLength*2] = '\0';
+    char* Secret = Hexify((uint8_t*)Seed, RelevantSeedLength);
 
     ToUpperCase(&Secret);
 
