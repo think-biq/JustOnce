@@ -24,11 +24,9 @@ if (JustOnce_WithTest)
 		include_directories(third-party/testly/src)
 	endif()
 
-	message(WARNING "Starting to setup test build ...")
 	file(GLOB JustOnce_Test_SRC	
 		"${PROJECT_SOURCE_DIR}/test/*.c"
 		"${PROJECT_SOURCE_DIR}/test/**/*.c")
 	add_executable (JustOnceTest ${JustOnce_Test_SRC})
 	target_link_libraries(JustOnceTest JustOnce Testly)
-	message(WARNING "Done ...")
 endif()
