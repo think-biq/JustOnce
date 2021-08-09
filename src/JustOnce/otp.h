@@ -25,12 +25,23 @@ SOFTWARE.
 #include <stdint.h>
 #include <string.h>
 
+enum otp_error_t_
+{
+	OTP_SUCCESS,
+	OTP_KEY_NULL,
+	OTP_KEY_LENGTH_INVALID,
+	OTP_KEY_DECODE_ERROR,
+	OTP_DIGITS_INVALID,
+	OTP_HMAC_ERROR
+};
+typedef enum otp_error_t_ otp_error_t;
+
 void ToByteArray(uint8_t* ByteArray, int64_t Data);
 
 const char* CheckForError(int HMAC);
 
-int CalculateHOTP(const char* Key, int64_t Data, size_t Digits);
+int CalculateHOTP(const char* Key, int64_t Data, size_t Digits, otp_error_t* State);
 
-int VerifyHOTP(int64_t HTOP, const char* Key, int64_t Data, size_t Digits);
+int VerifyHOTP(int64_t HTOP, const char* Key, int64_t Data, size_t Digits, otp_error_t* State);
 
 char* MakeStringFromHOTP(int64_t HTOP, size_t Digits);

@@ -34,6 +34,9 @@ SOFTWARE.
 #include "misc.h"
 #include "key.h"
 
+#define SET_CHECKED(Pointer, Value) \
+{ if (NULL != Pointer) *Pointer = Value; }
+
 const char* CheckForError(int HMAC)
 {
     if (0 < HMAC)
@@ -60,29 +63,33 @@ const char* CheckForError(int HMAC)
     return "UNKNOWN ERROR";
 }
 
-int CalculateHOTP (const char* Key, int64_t Data, size_t Digits)
+int CalculateHOTP(const char* Key, int64_t Data, size_t Digits, otp_error_t* State)
 {
     if (NULL == Key)
     {
+        SET_CHECKED(State, OTP_KEY_NULL);
         return -1;
     }
 
     size_t KeyLength = strlen(Key);
     if (32 != KeyLength)
     {
-        return -2;
+        SET_CHECKED(State, OTP_KEY_LENGTH_INVALID);
+        return -1;
     }
 
     if (3 > Digits && 10 < Digits)
     {
-        return -3;
+        SET_CHECKED(State, OTP_KEY_DECODE_ERROR);
+        return -1;
     }
 
     baseencode_error_t err;
     uint8_t* SecretHMAC = base32_decode (Key, KeyLength + 1, &err);
     if (NULL == SecretHMAC)
     {
-        return -4;
+        SET_CHECKED(State, OTP_DIGITS_INVALID);
+        return -1;
     }
 
     /*size_t SecretLengthHMAC = (size_t)((KeyLength + 1.6 - 1) / 1.6);*/
@@ -93,7 +100,7 @@ int CalculateHOTP (const char* Key, int64_t Data, size_t Digits)
     ToByteArray(DataAsReversedByteArray, Data);
 
     // Actually create the HMAC.
-    int TruncadedHMAC;
+    int Truncated;
     {
         unsigned char HMAC[SHA1_DIGEST_SIZE];
         size_t ActualHMACLength = CreateHMAC(HMAC,
@@ -107,22 +114,23 @@ int CalculateHOTP (const char* Key, int64_t Data, size_t Digits)
 
         if (SHA1_DIGEST_SIZE != ActualHMACLength)
         {
-            // Indicate size error.
-            TruncadedHMAC = -6;
+            SET_CHECKED(State, OTP_HMAC_ERROR);
+            Truncated = -1;
         }
         else
         {
             // Cut of excess digits.
-            TruncadedHMAC = TruncateHMAC(HMAC, Digits);            
+            Truncated = TruncateHMAC(HMAC, Digits);            
         }
     }
 
-    return TruncadedHMAC;
+    SET_CHECKED(State, OTP_SUCCESS);
+    return Truncated;
 }
 
-int VerifyHOTP(int64_t HTOP, const char* Key, int64_t Data, size_t Digits)
+int VerifyHOTP(int64_t HTOP, const char* Key, int64_t Data, size_t Digits,  otp_error_t* State)
 {
-    int64_t ExpectedHTOP = CalculateHOTP(Key, Data, Digits);    
+    int ExpectedHTOP = CalculateHOTP(Key, Data, Digits, State);
     return ExpectedHTOP == HTOP;
 }
 
