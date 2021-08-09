@@ -2,33 +2,38 @@
 
 /// key.h
 
-void TestNormalizeKey()
+int TestNormalizeKey()
 {
     const char* KeyReference = "HELLO";
     const char* Expected = "HELLO===========================";
     char* Key = strdup(KeyReference);
 
     NormalizeKey(&Key);
-    Assert(0, "NormalizeKey", TESTLY_EXIT_ON_FAIL, Expected, Key,
+    int Passed = Assert(0, "NormalizeKey", TESTLY_EXIT_ON_FAIL, Expected, Key,
         "Expected %s, got %s.", Expected, Key
     );
     
     free(Key);
+
+    return Passed;
 }
 
-void TestGenerateSecretFromSeed()
+int TestGenerateSecretFromSeed()
 {
     const char* Seed = "0001337000";
     const char* Expected = "30303031333337303030";
 
     char* SeededSecret = GenerateSecretFromSeed(Seed);
-    Assert(0, "GenerateSecretFromSeed", TESTLY_EXIT_ON_FAIL, Expected, SeededSecret,
+    int Passed = Assert(0, "GenerateSecretFromSeed", TESTLY_EXIT_ON_FAIL, Expected, SeededSecret,
         "Got %s from seed %s.", SeededSecret, Seed
     );
+
     free(SeededSecret);
+
+    return Passed;
 }
 
-void TestGenerateSecret()
+int TestGenerateSecret()
 {
     // Deactivates crypto safe rand (to be deterministic for tests).
     SetRandomizerSafe(0); 
@@ -38,14 +43,16 @@ void TestGenerateSecret()
     const char* Expected = "35323039333238393235";
 
     char* Secret = GenerateSecret();
-    Assert(0, "GenerateSecret", TESTLY_EXIT_ON_FAIL, Expected, Secret,
+    int Passed = Assert(0, "GenerateSecret", TESTLY_EXIT_ON_FAIL, Expected, Secret,
         "Expected %s, got %s.", Expected, Secret
     );
 
     free(Secret);
+
+    return Passed;
 }
 
-void TestGenerateSecretEntropy()
+int TestGenerateSecretEntropy()
 {
     // Deactivates crypto safe rand (to be deterministic for tests).
     SetRandomizerSafe(1); 
@@ -89,24 +96,27 @@ void TestGenerateSecretEntropy()
 
     int Expected = -1;
 
-    Assert(sizeof(int), "FoundCollision", TESTLY_EXIT_ON_FAIL, &Expected, &CollisionIndex,
+    return Assert(sizeof(int), "FoundCollision", TESTLY_EXIT_ON_FAIL, &Expected, &CollisionIndex,
         "Had collision on %i. generation. (Very rare case)", CollisionIndex
     );
 }
 
-void TestGenerateKeyFromSecret()
+int TestGenerateKeyFromSecret()
 {
     const char* Secret = "DEADCAFEBABE13372DEF";
     const char* Expected = "IRCUCRCDIFDEKQSBIJCTCMZTG4ZEIRKG";
 
     char* Key = GenerateKeyFromSecret(Secret);
-    Assert(0, "GenerateKeyFromSecret", TESTLY_EXIT_ON_FAIL, Expected, Key,
+    int Passed = Assert(0, "GenerateKeyFromSecret", TESTLY_EXIT_ON_FAIL, Expected, Key,
         "Expected %s, got %s.", Expected, Key
     );
+
     free(Key);
+
+    return Passed;
 }
 
-void TestGenerateKey()
+int TestGenerateKey()
 {
     // Deactivates crypto safe rand (to be deterministic for tests).
     SetRandomizerSafe(0); 
@@ -116,9 +126,11 @@ void TestGenerateKey()
     const char* Expected = "GM2TGMRTGAZTSMZTGMZDGOBTHEZTEMZV";
        
     char* Key = GenerateKey();
-    Assert(0, "GenerateKeyFromSecret", TESTLY_EXIT_ON_FAIL, Expected, Key,
+    int Passed = Assert(0, "GenerateKeyFromSecret", TESTLY_EXIT_ON_FAIL, Expected, Key,
         "Expected %s, got %s.", Expected, Key
     );
 
     free(Key);
+
+    return Passed;
 }

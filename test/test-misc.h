@@ -2,18 +2,21 @@
 
 // misc.h
 
-void TestUpperCase()
+int TestUpperCase()
 {
     const char* LowerCase = "lower case 42!";
     const char* Expected = "LOWER CASE 42!";
+    
+    int Passed;
 
     // Test MakeUpperCase
     {
         char* UpperCase = MakeUpperCase(LowerCase);
-        Assert(0, "MakeUpperCase", TESTLY_EXIT_ON_FAIL, Expected, UpperCase,
+        Passed = Assert(0, "MakeUpperCase", TESTLY_EXIT_ON_FAIL, Expected, UpperCase,
             "Expected (%s), got (%s).", Expected, UpperCase
         );
         free(UpperCase);
+        if (0 == Passed) return Passed;
     }
 
     // Test ToUpperCase
@@ -24,10 +27,13 @@ void TestUpperCase()
             "Expected %s, got %s.", Expected, LowerCaseDup
         );
         free(LowerCaseDup);
+        if (0 == Passed) return Passed;
     }
+
+    return Passed;
 }
 
-void TestHexify()
+int TestHexify()
 {
     uint8_t Buffer[5] = {
         202, 254, 186, 190, 105
@@ -35,8 +41,10 @@ void TestHexify()
     const char* Expected = "cafebabe69";
 
     char* Hash = Hexify(Buffer, 5);
-    Assert(0, "Hexify", TESTLY_EXIT_ON_FAIL, Expected, Hash,
+    int Passed = Assert(0, "Hexify", TESTLY_EXIT_ON_FAIL, Expected, Hash,
         "Expected %s, got %s.", Expected, Hash
     );
     free(Hash);
+
+    return Passed;
 }

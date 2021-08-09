@@ -1,7 +1,7 @@
 
 #undef TESTLY_ASSERT_DISABLED
-#include "testly/assert.h"
-#include "testly/run.h"
+#include <testly/assert.h>
+#include <testly/run.h>
 
 #include <stdlib.h>
 #include <stdio.h>
