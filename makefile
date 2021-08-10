@@ -5,7 +5,10 @@ PROJECT_DIR := $(shell dirname $(FILE_PATH))
 PROJECT_NAME := $(notdir $(patsubst %/,%,$(dir $(FILE_PATH))))
 BUILD_DIR := "$(PROJECT_DIR)/staging"
 WITH_TEST := 1
-TEST_FLAGS := -D JustOnce_WithTest=${WITH_TEST} -D ShaOne_WithTest=0 -D Testly_WithTest=0
+TEST_FLAGS := \
+	-D JustOnce_WithTest=${WITH_TEST} \
+	-D ShaOne_WithTest=0 \
+	-D Testly_WithTest=0
 
 default: all
 
@@ -25,7 +28,8 @@ build:
 	@make -C "$(BUILD_DIR)"
 
 run-test:
-	@(([ ${WITH_TEST} = 1 ] && [ -f "$(BUILD_DIR)/JustOnceTest" ]) && "$(BUILD_DIR)/./JustOnceTest" ) || echo Skipping test ...
+	@(([ ${WITH_TEST} = 1 ] && [ -f "$(BUILD_DIR)/JustOnceTest" ]) \
+		&& "$(BUILD_DIR)/./JustOnceTest" ) || echo Skipping test ...
 
 build-run: build run-test
 
