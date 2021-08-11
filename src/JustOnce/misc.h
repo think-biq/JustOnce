@@ -21,6 +21,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+/*! \file misc.h
+    \brief misc
+    
+    ^^
+*/
 
 #ifndef MISC_H_
 #define MISC_H_
@@ -28,10 +33,28 @@ SOFTWARE.
 #include <stdint.h>
 #include <string.h>
 
+/**
+* Creates an uppercase copy of the given string. Should be freed after usage.
+* 
+* @param String String to change.
+* @returns Uppercase string.
+*/
 char* MakeUpperCase(const char* String);
 
+/**
+* Changes given string to uppercase version in place.
+* 
+* @param String Pointer to string which should be uppercased.
+*/
 void ToUpperCase(char** String);
 
+/**
+* Creates a hexadecimal version of the given buffer. Should be freed after usage.
+* 
+* @param Buffer Data buffer.
+* @param Count Element size of buffer.
+* @returns Newly allocate hex string.
+*/
 char* Hexify(const uint8_t* Buffer, size_t Count);
 
 #endif

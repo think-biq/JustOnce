@@ -2,6 +2,32 @@
 
 /// key.h
 
+int TestIsValidKey()
+{
+    int Passed = 1;
+    {
+        const char* Key = "HELLO===========================";
+        const int Expected = 1;
+
+        int bIsValid = IsValidKey(Key);
+        Passed &= Assert(sizeof(int), "IsValidKey@Valid", TESTLY_EXIT_ON_FAIL, &Expected, &bIsValid,
+            "Expected %d, got %d.", Expected, bIsValid
+        );
+    }
+
+    {
+        const char* Key = "NotValid!";
+        const int Expected = 0;
+
+        int bIsValid = IsValidKey(Key);
+        Passed &= Assert(sizeof(int), "IsValidKey@Invalid", TESTLY_EXIT_ON_FAIL, &Expected, &bIsValid,
+            "Expected %d, got %d.", Expected, bIsValid
+        );
+    }
+
+    return Passed;
+}
+
 int TestNormalizeKey()
 {
     const char* KeyReference = "HELLO";

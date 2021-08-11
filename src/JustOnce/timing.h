@@ -21,6 +21,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+/*! \file timing.h
+    \brief timing
+    
+    ^^
+*/
 
 #include <stddef.h>
 #include <stdint.h>
@@ -28,10 +33,28 @@ SOFTWARE.
 #ifndef TIMING_H
 #define TIMING_H
 
+/**
+* GetUnixTimeNow
+*
+* @returns Unix time stamp of the time of calling.
+*/
 int64_t GetUnixTimeNow();
 
+/**
+* GetTimeFrame
+* 
+* @param UnixTime
+* @param Interval
+* @returns Timeframe for given unix time.
+*/
 int64_t GetTimeFrame(int64_t UnixTime, size_t Interval);
 
+/**
+* GetTimeFrameNow
+* 
+* @param Interval
+* @returns Timeframe for the time of calling.
+*/
 int64_t GetTimeFrameNow(size_t Interval);
 
 #endif

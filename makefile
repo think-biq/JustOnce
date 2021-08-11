@@ -30,6 +30,16 @@ run-test:
 	@(([ ${WITH_TEST} = 1 ] && [ -f "$(BUILD_DIR)/JustOnceTest" ]) \
 		&& "$(BUILD_DIR)/./JustOnceTest" ) || echo Skipping test ...
 
+docs: clean-docs
+	doxygen docs/doxygen.cfg > docs/doxygen.log 2> docs/doxygen.err.log
+
+open-docs:
+	open docs/html/index.html
+
+clean-docs:
+	rm -rf docs/{html,latex}
+	rm -f docs/doxygen*.log
+
 build-run: build run-test
 
 all: prepare build-run

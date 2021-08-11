@@ -24,6 +24,28 @@ void SetRandomizerSeed(int Seed)
     srand(Seed);
 }
 
+int IsValidKey(const char* Key)
+{
+    if (NULL == Key)
+    {
+        return 0;
+    }
+
+    size_t KeyLength = strlen(Key);
+
+    baseencode_error_t err;
+    uint8_t* SecretHMAC = base32_decode(Key, KeyLength + 1, &err);
+    
+    int bIsValid = NULL != SecretHMAC
+                && SUCCESS == err
+                ;
+
+    if (NULL != SecretHMAC)
+        free(SecretHMAC);
+
+    return bIsValid;
+}
+
 void NormalizeKey(char** Key)
 {
     const size_t RequiredKeyLength = 32;
@@ -43,8 +65,6 @@ void NormalizeKey(char** Key)
         strcat(NewKey, Appendix);
         NewKey[RequiredKeyLength] = '\0';
 
-        ToUpperCase(&NewKey);
-
         free(*Key);
         *Key = NewKey;
     }
@@ -53,12 +73,12 @@ void NormalizeKey(char** Key)
         char* NewKey = malloc(RequiredKeyLength + 1);
         strncpy(NewKey, *Key, RequiredKeyLength);
         NewKey[RequiredKeyLength] = '\0';
-
-        ToUpperCase(&NewKey);
         
         free(*Key);
         *Key = NewKey;
     }
+
+    ToUpperCase(Key);
 }
 
 char* GenerateSecretFromSeed(const char* Seed)
