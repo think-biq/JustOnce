@@ -21,63 +21,74 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+/*! \file key.h
+    \brief key
+    
+    ^^
+*/
 
 #ifndef KEY_H_
 #define KEY_H_
 
 /**
-* Truncates given HMAC to the specified number of digits and reshapes it into integral type.
-* @param HMAC Target HMAC. Buffer is assumed to be SHA1_DIGEST_SIZE (20) bytes in size.
-* @returns Truncated HMAC
+* Toggle the algortihm used for randomization. Uses cryptographically safe arc4random implementation if activated. 
+* 
+* @param bUseSafe Wether to active cryptocraphically safe random or deterministic random.
 */
 void SetRandomizerSafe(int bUseSafe);
 
 /**
-* Truncates given HMAC to the specified number of digits and reshapes it into integral type.
-* @param HMAC Target HMAC. Buffer is assumed to be SHA1_DIGEST_SIZE (20) bytes in size.
-* @returns Truncated HMAC
+* Configures seed value to be used by randomizer.
+* 
+* @param Seed Configures seed value.
 */
 void SetRandomizerSeed(int Seed);
 
 /**
-* Truncates given HMAC to the specified number of digits and reshapes it into integral type.
-* @param HMAC Target HMAC. Buffer is assumed to be SHA1_DIGEST_SIZE (20) bytes in size.
-* @returns Truncated HMAC
+* Normalizes given key in place.
+* 
+* If key < 32, it will append = for each missing character. If key > 32 it will
+* cutoff key at length 32. Also makes sure key is uppercase.
+* 
+* @param Key Key to normalize.
 */
 void NormalizeKey(char** Key);
 
 /**
-* Truncates given HMAC to the specified number of digits and reshapes it into integral type.
-* @param HMAC Target HMAC. Buffer is assumed to be SHA1_DIGEST_SIZE (20) bytes in size.
-* @returns Truncated HMAC
+* Creates new secret from given seed.
+* 
+* @param Seed
+* @returns Secret.
 */
 char* GenerateSecretFromSeed(const char* Seed);
 
 /**
-* Truncates given HMAC to the specified number of digits and reshapes it into integral type.
-* @param HMAC Target HMAC. Buffer is assumed to be SHA1_DIGEST_SIZE (20) bytes in size.
-* @returns Truncated HMAC
+* Creates new secret from random seed.
+*
+* @returns Random Secret.
 */
 char* GenerateSecret();
 
 /**
-* Truncates given HMAC to the specified number of digits and reshapes it into integral type.
-* @param HMAC Target HMAC. Buffer is assumed to be SHA1_DIGEST_SIZE (20) bytes in size.
-* @returns Truncated HMAC
+* Creates new key from given secret.
+* 
+* @param Secret
+* @returns Key
 */
 char* GenerateKeyFromSecret(const char* Secret);
 
 /**
-* Truncates given HMAC to the specified number of digits and reshapes it into integral type.
-* @param HMAC Target HMAC. Buffer is assumed to be SHA1_DIGEST_SIZE (20) bytes in size.
-* @returns Truncated HMAC
+* Creates new key from seed.
+* 
+* @param Seed
+* @returns Key
 */
 char* GenerateKeyFromSeed(const char* Seed);
 
 /**
-* Truncates given HMAC to the specified number of digits and reshapes it into integral type.
-* @param HMAC Target HMAC. Buffer is assumed to be SHA1_DIGEST_SIZE (20) bytes in size.
-* @returns Truncated HMAC
+* Creates new key from random seed.
+* 
+* @returns Key
 */
 char* GenerateKey();
 

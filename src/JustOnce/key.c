@@ -43,8 +43,6 @@ void NormalizeKey(char** Key)
         strcat(NewKey, Appendix);
         NewKey[RequiredKeyLength] = '\0';
 
-        ToUpperCase(&NewKey);
-
         free(*Key);
         *Key = NewKey;
     }
@@ -53,12 +51,12 @@ void NormalizeKey(char** Key)
         char* NewKey = malloc(RequiredKeyLength + 1);
         strncpy(NewKey, *Key, RequiredKeyLength);
         NewKey[RequiredKeyLength] = '\0';
-
-        ToUpperCase(&NewKey);
         
         free(*Key);
         *Key = NewKey;
     }
+
+    ToUpperCase(Key);
 }
 
 char* GenerateSecretFromSeed(const char* Seed)

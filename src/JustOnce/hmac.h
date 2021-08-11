@@ -21,6 +21,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+/*! \file hmac.h
+    \brief hmac
+    
+    ^^
+*/
 
 #ifndef HMAC_H_
 #define HMAC_H_
@@ -36,6 +41,7 @@ SOFTWARE.
 
 /**
 * Generates HMAC from given data.
+* 
 * @param HMAC Generated HMAC. Buffer needs to be at least SHA1_DIGEST_SIZE (20) bytes in size.
 * @param Secret Secret key. 
 * @param SecretLength Lenght of the key.
@@ -53,6 +59,7 @@ size_t CreateHMAC(
 
 /**
 * Truncates given HMAC to the specified number of digits and reshapes it into integral type.
+* 
 * @param HMAC Target HMAC. Buffer is assumed to be SHA1_DIGEST_SIZE (20) bytes in size.
 * @returns Truncated HMAC
 */
