@@ -32,16 +32,20 @@ int IsValidKey(const char* Key)
     }
 
     size_t KeyLength = strlen(Key);
+    if (32 != KeyLength)
+    {
+        return 0;
+    }
 
     baseencode_error_t err;
-    uint8_t* SecretHMAC = base32_decode(Key, KeyLength + 1, &err);
-    
-    int bIsValid = NULL != SecretHMAC
+    unsigned char* Secret = base32_decode(Key, KeyLength, &err);
+
+    int bIsValid = NULL != Secret
                 && SUCCESS == err
                 ;
 
-    if (NULL != SecretHMAC)
-        free(SecretHMAC);
+    if (NULL != Secret)
+        free(Secret);
 
     return bIsValid;
 }

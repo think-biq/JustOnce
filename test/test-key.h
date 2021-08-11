@@ -25,6 +25,16 @@ int TestIsValidKey()
         );
     }
 
+    {
+        const char* Key = "HELLO===========================HELLO";
+        const int Expected = 0;
+
+        int bIsValid = IsValidKey(Key);
+        Passed &= Assert(sizeof(int), "IsValidKey@TooLong", TESTLY_EXIT_ON_FAIL, &Expected, &bIsValid,
+            "Expected %d, got %d.", Expected, bIsValid
+        );
+    }
+
     return Passed;
 }
 
