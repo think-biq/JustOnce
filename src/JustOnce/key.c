@@ -50,12 +50,13 @@ int IsValidKey(const char* Key)
     return bIsValid;
 }
 
-void NormalizeKey(char** Key)
+char* NormalizeKey(const char* Key)
 {
     const size_t RequiredKeyLength = 32;
-    const size_t KeyLength = strlen(*Key);
+    const size_t KeyLength = strlen(Key);
     const int MissingKeyCharacters = RequiredKeyLength - KeyLength;
 
+    char* NewKey;
     if (0 < MissingKeyCharacters)
     {
         char Appendix[MissingKeyCharacters];
@@ -64,25 +65,25 @@ void NormalizeKey(char** Key)
             Appendix[Index] = '=';
         }
 
-        char* NewKey = calloc(1, RequiredKeyLength + 1);
-        strcat(NewKey, *Key);
+        NewKey = calloc(1, RequiredKeyLength + 1);
+        strcat(NewKey, Key);
         strcat(NewKey, Appendix);
         NewKey[RequiredKeyLength] = '\0';
-
-        free(*Key);
-        *Key = NewKey;
     }
     else if (0 > MissingKeyCharacters)
     {        
-        char* NewKey = malloc(RequiredKeyLength + 1);
-        strncpy(NewKey, *Key, RequiredKeyLength);
+        NewKey = malloc(RequiredKeyLength + 1);
+        strncpy(NewKey, Key, RequiredKeyLength);
         NewKey[RequiredKeyLength] = '\0';
-        
-        free(*Key);
-        *Key = NewKey;
+    }
+    else
+    {
+        NewKey = strdup(Key);
     }
 
-    ToUpperCase(Key);
+    ToUpperCase(&NewKey);
+
+    return NewKey;
 }
 
 char* GenerateSecretFromSeed(const char* Seed)

@@ -40,16 +40,15 @@ int TestIsValidKey()
 
 int TestNormalizeKey()
 {
-    const char* KeyReference = "HELLO";
+    const char* Key = "HELLO";
     const char* Expected = "HELLO===========================";
-    char* Key = strdup(KeyReference);
 
-    NormalizeKey(&Key);
-    int Passed = Assert(0, "NormalizeKey", TESTLY_EXIT_ON_FAIL, Expected, Key,
-        "Expected %s, got %s.", Expected, Key
+    char* NormalizedKey = NormalizeKey(Key);
+    int Passed = Assert(0, "NormalizeKey", TESTLY_EXIT_ON_FAIL, Expected, NormalizedKey,
+        "Expected %s, got %s.", Expected, NormalizedKey
     );
     
-    free(Key);
+    free(NormalizedKey);
 
     return Passed;
 }

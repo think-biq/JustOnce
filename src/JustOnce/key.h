@@ -53,14 +53,15 @@ void SetRandomizerSeed(int Seed);
 int IsValidKey(const char* Key);
 
 /**
-* Normalizes given key in place.
+* Normalizes given key.
 * 
 * If key < 32, it will append = for each missing character. If key > 32 it will
 * cutoff key at length 32. Also makes sure key is uppercase.
 * 
 * @param Key Key to normalize.
+* @returns Normalized key.
 */
-void NormalizeKey(char** Key);
+char* NormalizeKey(const char* Key);
 
 /**
 * Creates new secret from given seed.
