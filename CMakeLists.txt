@@ -8,12 +8,12 @@ string(
     IS_STANDALON_PROJECT
 )
 
-if (IS_STANDALON_PROJECT)
+#[[if (IS_STANDALON_PROJECT)]]
 	add_subdirectory(third-party/ShaOne)
 	include_directories(third-party/ShaOne/src)
-else()
+#[[else()
 	find_package(ShaOne)
-endif()
+endif()]]
 
 add_subdirectory(third-party/libbaseencode)
 include_directories(third-party/libbaseencode/src)
