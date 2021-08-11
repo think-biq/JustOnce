@@ -24,6 +24,28 @@ void SetRandomizerSeed(int Seed)
     srand(Seed);
 }
 
+int IsValidKey(const char* Key)
+{
+    if (NULL == Key)
+    {
+        return 0;
+    }
+
+    size_t KeyLength = strlen(Key);
+
+    baseencode_error_t err;
+    uint8_t* SecretHMAC = base32_decode(Key, KeyLength + 1, &err);
+    
+    int bIsValid = NULL != SecretHMAC
+                && SUCCESS == err
+                ;
+
+    if (NULL != SecretHMAC)
+        free(SecretHMAC);
+
+    return bIsValid;
+}
+
 void NormalizeKey(char** Key)
 {
     const size_t RequiredKeyLength = 32;

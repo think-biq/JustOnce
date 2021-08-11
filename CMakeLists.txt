@@ -20,9 +20,7 @@ include_directories(third-party/libbaseencode/src)
 
 file (GLOB JustOnce_SRC
 	"${PROJECT_SOURCE_DIR}/src/**/*.c")
-file (GLOB JustOnce_ThirdParty_SRC
-	"${PROJECT_SOURCE_DIR}/third-party/**/*.c")
-add_library(JustOnce SHARED ${JustOnce_SRC} ${JustOnce_ThirdParty_SRC})
+add_library(JustOnce SHARED ${JustOnce_SRC})
 target_include_directories(JustOnce PUBLIC
   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>"
 )

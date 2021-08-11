@@ -28,6 +28,7 @@ int main (void)
     RUN_TEST(TestCreateHMAC);
     RUN_TEST(TestTruncateHMAC);
 
+    RUN_TEST(TestIsValidKey);
     RUN_TEST(TestNormalizeKey);
     RUN_TEST(TestGenerateSecretFromSeed);
     RUN_TEST(TestGenerateSecret);

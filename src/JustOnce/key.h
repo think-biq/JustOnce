@@ -45,6 +45,14 @@ void SetRandomizerSafe(int bUseSafe);
 void SetRandomizerSeed(int Seed);
 
 /**
+* Checks if given key is valid.
+* 
+* @param Key Key to check.
+* @returns 1 if valid. 0 otherwise.
+*/
+int IsValidKey(const char* Key);
+
+/**
 * Normalizes given key in place.
 * 
 * If key < 32, it will append = for each missing character. If key > 32 it will
