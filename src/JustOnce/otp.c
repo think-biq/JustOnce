@@ -173,3 +173,28 @@ void ToByteArray(uint8_t* ByteArray, int64_t Data)
         ByteArray[ByteArrayIndex] = Value;
     }
 }
+
+char* GenerateAuthURL(otp_operation_t Type, const char* NormalizedKey,
+    const char* AccountName, const char* Issuer, size_t Digits, size_t Interval)
+{
+    static const char* FMT =
+        "otpauth://%s/%s?secret=%s&issuer=%s&algorithm=SHA1&digits=%i&period=%i";
+    
+    const char* TypeName = NULL;
+    switch(Type)
+    {
+        case OTP_OP_HOTP:
+            TypeName = "hotp";
+            break;
+        default:
+        case OTP_OP_TOTP:
+            TypeName = "totp";
+            break;
+    }
+
+    char* URI = calloc(1, JUSTONCE_MAX_OTP_URL_LENGTH);
+    snprintf(URI, JUSTONCE_MAX_OTP_URL_LENGTH, FMT, 
+        TypeName, AccountName, NormalizedKey, Issuer, Digits, Interval);
+
+    return URI;
+}
