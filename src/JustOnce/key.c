@@ -70,15 +70,11 @@ char* NormalizeKey(const char* Key)
         strcat(NewKey, Appendix);
         NewKey[RequiredKeyLength] = '\0';
     }
-    else if (0 > MissingKeyCharacters)
+    else //if (0 > MissingKeyCharacters)
     {        
         NewKey = malloc(RequiredKeyLength + 1);
         strncpy(NewKey, Key, RequiredKeyLength);
         NewKey[RequiredKeyLength] = '\0';
-    }
-    else
-    {
-        NewKey = strdup(Key);
     }
 
     ToUpperCase(&NewKey);

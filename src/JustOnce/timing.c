@@ -35,6 +35,12 @@ int64_t GetTimeFrame(int64_t UnixTime, size_t Interval) {
     return UnixTime / (int64_t)Interval;    
 }
 
+int64_t GetTimeFrameProgress(int64_t UnixTime, size_t Interval) {
+	int64_t TimeFrame = GetTimeFrame(UnixTime, Interval);
+	int64_t FrameStart = TimeFrame * Interval;
+	return UnixTime - FrameStart;
+}
+
 int64_t GetTimeFrameNow(size_t Interval) {
 	return GetTimeFrame(GetUnixTimeNow(), Interval);
 }
