@@ -174,11 +174,10 @@ void ToByteArray(uint8_t* ByteArray, int64_t Data)
     }
 }
 
-char* GenerateAuthURL(otp_operation_t Type, const char* NormalizedKey,
+char* GenerateAuthURI(otp_operation_t Type, const char* NormalizedKey,
     const char* AccountName, const char* Issuer, size_t Digits, size_t Interval)
 {
-    static const char* FMT =
-        "otpauth://%s/%s?secret=%s&issuer=%s&algorithm=SHA1&digits=%i&period=%i";
+    static const char* FMT = JUSTONCE_OTP_URL_FMT;
     
     const char* TypeName = NULL;
     switch(Type)
@@ -192,9 +191,15 @@ char* GenerateAuthURL(otp_operation_t Type, const char* NormalizedKey,
             break;
     }
 
-    char* URI = calloc(1, JUSTONCE_MAX_OTP_URL_LENGTH);
-    snprintf(URI, JUSTONCE_MAX_OTP_URL_LENGTH, FMT, 
-        TypeName, AccountName, NormalizedKey, Issuer, Digits, Interval);
+    char* EncodedAccountName = URLEncode(AccountName);
+    char* EncodedIssuer = URLEncode(Issuer);
+
+    char* URI = calloc(1, JUSTONCE_OTP_URL_MAX_LENGTH);
+    snprintf(URI, JUSTONCE_OTP_URL_MAX_LENGTH, FMT, 
+        TypeName, EncodedAccountName, NormalizedKey, EncodedIssuer, Digits, Interval);
+
+    free(EncodedAccountName);
+    free(EncodedIssuer);
 
     return URI;
 }

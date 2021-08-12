@@ -31,7 +31,9 @@ SOFTWARE.
 #include <string.h>
 #include <ShaOne/sha.h>
 
-#define JUSTONCE_MAX_OTP_URL_LENGTH 512
+#define JUSTONCE_OTP_URL_MAX_LENGTH 512
+#define JUSTONCE_OTP_URL_FMT \
+	"otpauth://%s/%s?secret=%s&issuer=%s&algorithm=SHA1&digits=%zu&period=%zu"
 
 /** Defining OTP error codes. */
 enum otp_error_t_
@@ -145,5 +147,5 @@ char* MakeStringFromOTP(int64_t HTOP, size_t Digits);
 * @param Interval
 * @returns URI
 */
-char* GenerateAuthURL(otp_operation_t Type, const char* NormalizedKey,
+char* GenerateAuthURI(otp_operation_t Type, const char* NormalizedKey,
     const char* AccountName, const char* Issuer, size_t Digits, size_t Interval);

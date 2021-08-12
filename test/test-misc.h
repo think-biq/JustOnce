@@ -48,3 +48,16 @@ int TestHexify()
 
     return Passed;
 }
+
+int TestURLEncode()
+{
+    const char* Expected = "Email%3a%20hansimgl%c3%bcck%40hatkeine.email";
+    char* Encoded = URLEncode("Email: hansimglück@hatkeine.email");
+
+    int Passed = Assert(0, "URLEncode", TESTLY_EXIT_ON_FAIL, Expected, Encoded,
+        "Expected %s, got %s.", Expected, Encoded
+    );
+    free(Encoded);
+
+    return Passed;
+}

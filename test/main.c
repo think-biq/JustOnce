@@ -38,6 +38,7 @@ int main (void)
 
     RUN_TEST(TestUpperCase);
     RUN_TEST(TestHexify);
+    RUN_TEST(TestURLEncode);
 
     RUN_TEST(TestToByteArray);
     RUN_TEST(TestCalculateHOTP);
@@ -45,6 +46,7 @@ int main (void)
     RUN_TEST(TestCalculateTOTP);
     RUN_TEST(TestVerifyTOTP);
     RUN_TEST(TestMakeStringFromOTP);
+    RUN_TEST(TestGenerateAuthURL);
 
     RUN_TEST(TestTiming);    
 
