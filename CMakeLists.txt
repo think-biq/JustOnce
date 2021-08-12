@@ -1,6 +1,12 @@
 CMAKE_MINIMUM_REQUIRED (VERSION 3.2)
 
-project (JustOnce)
+# set up versioning.
+set(BUILD_MAJOR "1")
+set(BUILD_MINOR "2")
+set(BUILD_PATCH "10")
+set(BUILD_VERSION "${BUILD_MAJOR}.${BUILD_MINOR}.${BUILD_PATCH}")
+
+project (JustOnce VERSION ${BUILD_VERSION})
 
 string(
     COMPARE EQUAL
