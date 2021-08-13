@@ -31,6 +31,10 @@ SOFTWARE.
 #include <string.h>
 #include <ShaOne/sha.h>
 
+#define JUSTONCE_OTP_URL_MAX_LENGTH 512
+#define JUSTONCE_OTP_URL_FMT \
+	"otpauth://%s/%s?secret=%s&issuer=%s&algorithm=SHA1&digits=%zu&period=%zu"
+
 /** Defining OTP error codes. */
 enum otp_error_t_
 {
@@ -44,6 +48,17 @@ enum otp_error_t_
 
 /** OTP error codes. */
 typedef enum otp_error_t_ otp_error_t;
+
+/** Defining OTP error codes. */
+enum otp_operation_t_
+{
+	OTP_OP_HOTP,
+	OTP_OP_TOTP	
+};
+
+/** OTP error codes. */
+typedef enum otp_operation_t_ otp_operation_t;
+
 
 /**
 * Look up error code string.
@@ -118,3 +133,19 @@ int VerifyTOTP(int64_t TOTP, const char* Key, int64_t Timestamp, int64_t Interva
 * @returns HOTP
 */
 char* MakeStringFromOTP(int64_t HTOP, size_t Digits);
+
+/**
+* Generates a URI for usage with external authenticator applications.
+* 
+* Has the format "otpauth://%s/%s?secret=%s&issuer=%s&algorithm=SHA1&digits=%i&period=%i"
+* 
+* @param Type
+* @param NormalizedKey
+* @param AccountName
+* @param Issuer
+* @param Digits
+* @param Interval
+* @returns URI
+*/
+char* GenerateAuthURI(otp_operation_t Type, const char* NormalizedKey,
+    const char* AccountName, const char* Issuer, size_t Digits, size_t Interval);

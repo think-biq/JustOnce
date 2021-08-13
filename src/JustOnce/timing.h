@@ -50,6 +50,15 @@ int64_t GetUnixTimeNow();
 int64_t GetTimeFrame(int64_t UnixTime, size_t Interval);
 
 /**
+* GetTimeFrameProgress
+* 
+* @param UnixTime
+* @param Interval
+* @returns Timeframe for given unix time.
+*/
+int64_t GetTimeFrameProgress(int64_t UnixTime, size_t Interval);
+
+/**
 * GetTimeFrameNow
 * 
 * @param Interval

@@ -48,4 +48,20 @@ char* MakeUpperCase(const char* String);
 */
 void ToUpperCase(char** String);
 
+/**
+* Creates URL safe encoding from raw string.
+* 
+* @param Raw String to be encoded.
+* @returns URL encoded string.
+*/
+char* URLEncode(const char* Raw);
+
+/**
+* Creates raw string from URL safe encoding.
+* 
+* @param Encoded Encoded string.
+* @returns Raw string.
+*/
+char* URLDecode(const char* Encoded);
+
 #endif

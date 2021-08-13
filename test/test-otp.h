@@ -140,3 +140,32 @@ int TestMakeStringFromOTP()
 
     return Passed;
 }
+
+int TestGenerateAuthURL()
+{
+    const otp_operation_t Type = OTP_OP_TOTP;
+    const char* AccountName = "support@think-biq.com";
+    const char* Issuer = "biq";
+    const size_t Digits = 6;
+    const size_t Interval = 30;
+    const char* Key = "???";
+
+    char* EncodedAccountName = URLEncode(AccountName);
+    char* EncodedIssuer =  URLEncode(Issuer);
+
+    const char Expected[JUSTONCE_OTP_URL_MAX_LENGTH];
+    snprintf((char*)Expected, JUSTONCE_OTP_URL_MAX_LENGTH, JUSTONCE_OTP_URL_FMT,
+        "totp", EncodedAccountName, Key, EncodedIssuer, Digits, Interval);
+
+    free(EncodedIssuer);
+    free(EncodedAccountName);
+
+    char* AuthURI = GenerateAuthURI(Type, Key, AccountName, Issuer, Digits, Interval);
+    int Passed = Assert(0, "GenerateAuthURI", TESTLY_EXIT_ON_FAIL, Expected, AuthURI,
+        "Expected %s, got %s.", Expected, AuthURI
+    );
+
+    free(AuthURI);
+
+    return Passed;
+}
