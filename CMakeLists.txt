@@ -14,21 +14,16 @@ string(
     IS_STANDALON_PROJECT
 )
 
-#[[if (IS_STANDALON_PROJECT)]]
-	add_subdirectory(third-party/ShaOne)
-	include_directories(third-party/ShaOne/src)
-#[[else()
-	find_package(ShaOne)
-endif()]]
-
+add_subdirectory(third-party/ShaOne)
 add_subdirectory(third-party/libbaseencode)
-include_directories(third-party/libbaseencode/src)
 
 file (GLOB JustOnce_SRC
 	"${PROJECT_SOURCE_DIR}/src/**/*.c")
 add_library(JustOnce SHARED ${JustOnce_SRC})
 target_include_directories(JustOnce PUBLIC
   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>"
+  "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/third-party/ShaOne/src>"
+  "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/third-party/libbaseencode/src>"
 )
 target_link_libraries(JustOnce ShaOne baseencode)
 
