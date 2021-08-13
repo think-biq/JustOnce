@@ -48,13 +48,4 @@ char* MakeUpperCase(const char* String);
 */
 void ToUpperCase(char** String);
 
-/**
-* Creates a hexadecimal version of the given buffer. Should be freed after usage.
-* 
-* @param Buffer Data buffer.
-* @param Count Element size of buffer.
-* @returns Newly allocate hex string.
-*/
-char* Hexify(const uint8_t* Buffer, size_t Count);
-
 #endif

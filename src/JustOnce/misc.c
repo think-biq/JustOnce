@@ -34,22 +34,3 @@ void ToUpperCase(char** String)
         }
     }	
 }
-
-char* Hexify(const uint8_t* Buffer, size_t Count)
-{
-    if (NULL == Buffer)
-    {
-        return NULL;
-    }
-
-    char* Hash = calloc(1, Count*2+1);
-    for (size_t Index = 0; Index < Count; ++Index)
-    {
-        char Hex[3];
-        snprintf(Hex, 3, "%02x", Buffer[Index]);
-        strcat(Hash, Hex);
-    }
-
-    Hash[Count*2] = '\0';
-    return Hash;
-}

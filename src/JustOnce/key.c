@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <baseencode.h>
+#include <ShaOne/hash.h>
 
 static int Global_bUseSafeRand = 1;
 

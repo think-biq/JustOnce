@@ -15,6 +15,8 @@
 #include <JustOnce/key.h>
 #include <JustOnce/misc.h>
 
+#include <ShaOne/hash.h>
+
 #define VERBOSE 0
 
 #include "test-hmac.h"
