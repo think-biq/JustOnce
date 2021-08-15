@@ -1,9 +1,9 @@
-[submodule "third-party/testly"]
-	path = third-party/testly
-	url = https://github.com/think-biq/testly
-[submodule "third-party/ShaOne"]
-	path = third-party/ShaOne
+[submodule "lib/ShaOne"]
+	path = lib/ShaOne
 	url = https://github.com/think-biq/ShaOne
-[submodule "third-party/libbaseencode"]
-	path = third-party/libbaseencode
+[submodule "lib/libbaseencode"]
+	path = lib/libbaseencode
 	url = https://github.com/think-biq/libbaseencode
+[submodule "lib/testly"]
+	path = lib/testly
+	url = https://github.com/think-biq/testly

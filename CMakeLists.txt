@@ -18,24 +18,24 @@ string(
     IS_STANDALON_PROJECT
 )
 
-add_subdirectory(third-party/ShaOne)
-add_subdirectory(third-party/libbaseencode)
+add_subdirectory(lib/ShaOne)
+add_subdirectory(lib/libbaseencode)
 
 file (GLOB JustOnce_SRC
 	"${PROJECT_SOURCE_DIR}/src/**/*.c")
 add_library(JustOnce SHARED ${JustOnce_SRC})
 target_include_directories(JustOnce PUBLIC
   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>"
-  "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/third-party/ShaOne/src>"
-  "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/third-party/libbaseencode/src>"
+  "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/lib/ShaOne/src>"
+  "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/lib/libbaseencode/src>"
 )
 target_link_libraries(JustOnce ShaOne baseencode)
 
 
 if (JustOnce_WithTest)
 	if (IS_STANDALON_PROJECT)
-		add_subdirectory(third-party/testly)
-		include_directories(third-party/testly/src)
+		add_subdirectory(lib/testly)
+		include_directories(lib/testly/src)
 	else()
 		find_package(Testly)
 	endif()
