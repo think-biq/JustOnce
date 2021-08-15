@@ -3,6 +3,7 @@
 
 #include "misc.h"
 #include <string.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <baseencode.h>
@@ -18,6 +19,11 @@ void SetRandomizerSafe(int bUseSafeRand)
 int GetRandomNumber()
 {
     return Global_bUseSafeRand ? arc4random() : rand();
+}
+
+int GetRandomNumberRanged(uint32_t Limit)
+{
+    return Global_bUseSafeRand ? arc4random_uniform(Limit) : rand() % Limit;
 }
 
 void SetRandomizerSeed(int Seed)
@@ -57,7 +63,7 @@ char* NormalizeKey(const char* Key)
     const size_t KeyLength = strlen(Key);
     const int MissingKeyCharacters = RequiredKeyLength - KeyLength;
 
-    char* NewKey;
+    char* NewKey = NULL;
     if (0 < MissingKeyCharacters)
     {
         char Appendix[MissingKeyCharacters];
@@ -83,22 +89,23 @@ char* NormalizeKey(const char* Key)
     return NewKey;
 }
 
-char* GenerateSecretFromSeed(const char* Seed)
+char* GenerateSecretFromSeed(const uint8_t* Seed, size_t SeedLength)
 {
     static size_t RelevantSeedLength = 10;
 
     if (NULL == Seed)
     {
+        fprintf(stderr, "Given seed is null!\n");
         return NULL;
     }
 
-    const size_t SeedLength = strlen(Seed);
     if (RelevantSeedLength > SeedLength)
     {
+        fprintf(stderr, "Seed size is smaller than 10! (%zu) '%s'\n", SeedLength, Seed);
         return NULL;
     }
 
-    char* Secret = Hexify((uint8_t*)Seed, RelevantSeedLength);
+    char* Secret = Hexify(Seed, RelevantSeedLength);
 
     ToUpperCase(&Secret);
 
@@ -108,29 +115,14 @@ char* GenerateSecretFromSeed(const char* Seed)
 char* GenerateSecret()
 {
     static const int RequiredSize = 10;
+    uint8_t Seed[RequiredSize];
 
-    int Catch = GetRandomNumber();
-    int Ball = GetRandomNumber();
+    for (size_t Index = 0; Index < RequiredSize; ++Index)
+    {
+        Seed[Index] = GetRandomNumberRanged(256);
+    }
 
-    char* Base = calloc(1, 5 + 1);
-    snprintf(Base, 6, "%05d", Catch);
-    Base[5] = '\0';
-
-    char* Tail = calloc(1, 5 + 1);
-    snprintf(Tail, 6, "%05d", Ball);
-    Tail[5] = '\0';
-
-    char* Seed = calloc(1, 5 + 5 + 1);
-    snprintf(Seed, 11, "%s%s", Base, Tail);
-    Seed[5 + 5] = '\0';
-
-    free(Base);
-    free(Tail);
-
-    char* Secret = GenerateSecretFromSeed(Seed);
-    if (NULL != Secret)
-        free(Seed);
-
+    char* Secret = GenerateSecretFromSeed(Seed, 10);
     return Secret;
 }
 
@@ -151,9 +143,9 @@ char* GenerateKeyFromSecret(const char* Secret)
     return Key;
 }
 
-char* GenerateKeyFromSeed(const char* Seed)
+char* GenerateKeyFromSeed(const uint8_t* Seed, size_t SeedLength)
 {
-    char* Secret = GenerateSecretFromSeed(Seed);
+    char* Secret = GenerateSecretFromSeed(Seed, SeedLength);
     char* Key = GenerateKeyFromSecret(Secret);
     free(Secret);
 

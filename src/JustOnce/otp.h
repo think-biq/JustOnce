@@ -85,7 +85,8 @@ void ToByteArray(uint8_t* ByteArray, int64_t Data);
 * @param Key
 * @returns HOTP
 */
-int CalculateHOTP(const char* Key, int64_t Counter, size_t Digits, otp_error_t* State);
+int CalculateHOTP(const char* Key, int64_t Counter, size_t Digits,
+	otp_error_t* State);
 
 /**
 * VerifyHOTP
@@ -97,7 +98,8 @@ int CalculateHOTP(const char* Key, int64_t Counter, size_t Digits, otp_error_t* 
 * @param State
 * @returns True of false.
 */
-int VerifyHOTP(int64_t HTOP, const char* Key, int64_t Counter, size_t Digits, otp_error_t* State);
+int VerifyHOTP(int64_t HTOP, const char* Key, int64_t Counter, size_t Digits,
+	otp_error_t* State);
 
 /**
 * CalculateTOTP
@@ -109,7 +111,8 @@ int VerifyHOTP(int64_t HTOP, const char* Key, int64_t Counter, size_t Digits, ot
 * @param State
 * @returns TOTP
 */
-int CalculateTOTP(const char* Key, int64_t Timestamp, int64_t Interval, size_t Digits, otp_error_t* State);
+int CalculateTOTP(const char* Key, int64_t Timestamp, int64_t Interval,
+	size_t Digits, otp_error_t* State);
 
 /**
 * VerifyTOTP
@@ -121,7 +124,8 @@ int CalculateTOTP(const char* Key, int64_t Timestamp, int64_t Interval, size_t D
 * @param State
 * @returns TOTP
 */
-int VerifyTOTP(int64_t TOTP, const char* Key, int64_t Timestamp, int64_t Interval, size_t Digits,  otp_error_t* State);
+int VerifyTOTP(int64_t TOTP, const char* Key, int64_t Timestamp,
+	int64_t Interval, size_t Digits,  otp_error_t* State);
 
 /**
 * MakeStringFromOTP

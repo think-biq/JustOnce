@@ -30,6 +30,9 @@ SOFTWARE.
 #ifndef KEY_H_
 #define KEY_H_
 
+#include <stdint.h>
+#include <string.h>
+
 /**
 * Toggle the algortihm used for randomization. Uses cryptographically safe arc4random implementation if activated. 
 * 
@@ -67,9 +70,10 @@ char* NormalizeKey(const char* Key);
 * Creates new secret from given seed.
 * 
 * @param Seed
+* @param SeedLength
 * @returns Secret.
 */
-char* GenerateSecretFromSeed(const char* Seed);
+char* GenerateSecretFromSeed(const uint8_t* Seed, size_t SeedLength);
 
 /**
 * Creates new secret from random seed.
@@ -82,6 +86,7 @@ char* GenerateSecret();
 * Creates new key from given secret.
 * 
 * @param Secret
+* @param SeedLength
 * @returns Key
 */
 char* GenerateKeyFromSecret(const char* Secret);
@@ -92,7 +97,7 @@ char* GenerateKeyFromSecret(const char* Secret);
 * @param Seed
 * @returns Key
 */
-char* GenerateKeyFromSeed(const char* Seed);
+char* GenerateKeyFromSeed(const uint8_t* Seed, size_t SeedLength);
 
 /**
 * Creates new key from random seed.

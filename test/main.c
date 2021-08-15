@@ -34,7 +34,7 @@ int main (void)
     RUN_TEST(TestNormalizeKey);
     RUN_TEST(TestGenerateSecretFromSeed);
     RUN_TEST(TestGenerateSecret);
-    //RUN_TEST(TestGenerateSecretEntropy);
+    RUN_TEST(TestGenerateSecretEntropy);
     RUN_TEST(TestGenerateKeyFromSecret);
     RUN_TEST(TestGenerateKey);
 
