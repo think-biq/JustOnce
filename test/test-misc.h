@@ -7,12 +7,12 @@ int TestUpperCase()
     const char* LowerCase = "lower case 42!";
     const char* Expected = "LOWER CASE 42!";
     
-    int Passed;
+    int Passed = 1;
 
     // Test MakeUpperCase
     {
         char* UpperCase = MakeUpperCase(LowerCase);
-        Passed = Assert(0, "MakeUpperCase", TESTLY_EXIT_ON_FAIL, Expected, UpperCase,
+        Passed &= Check("MakeUpperCase", 0, Expected, UpperCase,
             "Expected (%s), got (%s).", Expected, UpperCase
         );
         free(UpperCase);
@@ -23,7 +23,7 @@ int TestUpperCase()
     {
         char* LowerCaseDup = strdup(LowerCase);
         ToUpperCase(&LowerCaseDup);
-        Assert(0, "ToUpperCase", TESTLY_EXIT_ON_FAIL, Expected, LowerCaseDup,
+        Passed &= Check("ToUpperCase", 0, Expected, LowerCaseDup,
             "Expected %s, got %s.", Expected, LowerCaseDup
         );
         free(LowerCaseDup);
@@ -41,7 +41,7 @@ int TestHexify()
     const char* Expected = "cafebabe69";
 
     char* Hash = Hexify(Buffer, 5);
-    int Passed = Assert(0, "Hexify", TESTLY_EXIT_ON_FAIL, Expected, Hash,
+    int Passed = Check("Hexify", 0, Expected, Hash,
         "Expected %s, got %s.", Expected, Hash
     );
     free(Hash);
@@ -54,7 +54,7 @@ int TestURLEncode()
     const char* Expected = "Email%3a%20hansimgl%c3%bcck%40hatkeine.email";
     char* Encoded = URLEncode("Email: hansimglück@hatkeine.email");
 
-    int Passed = Assert(0, "URLEncode", TESTLY_EXIT_ON_FAIL, Expected, Encoded,
+    int Passed = Check("URLEncode", 0, Expected, Encoded,
         "Expected %s, got %s.", Expected, Encoded
     );
     free(Encoded);

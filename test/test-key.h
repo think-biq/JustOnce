@@ -10,7 +10,7 @@ int TestIsValidKey()
         const int Expected = 1;
 
         int bIsValid = IsValidKey(Key);
-        Passed &= Assert(sizeof(int), "IsValidKey@Valid", TESTLY_EXIT_ON_FAIL,
+        Passed &= Check("IsValidKey@Valid", sizeof(int),
             &Expected, &bIsValid,
             "Expected %d, got %d.", Expected, bIsValid
         );
@@ -21,7 +21,7 @@ int TestIsValidKey()
         const int Expected = 0;
 
         int bIsValid = IsValidKey(Key);
-        Passed &= Assert(sizeof(int), "IsValidKey@Invalid", TESTLY_EXIT_ON_FAIL,
+        Passed &= Check("IsValidKey@Invalid", sizeof(int),
             &Expected, &bIsValid,
             "Expected %d, got %d.", Expected, bIsValid
         );
@@ -32,7 +32,7 @@ int TestIsValidKey()
         const int Expected = 0;
 
         int bIsValid = IsValidKey(Key);
-        Passed &= Assert(sizeof(int), "IsValidKey@TooLong", TESTLY_EXIT_ON_FAIL,
+        Passed &= Check("IsValidKey@TooLong", sizeof(int),
             &Expected, &bIsValid,
             "Expected %d, got %d.", Expected, bIsValid
         );
@@ -47,7 +47,7 @@ int TestNormalizeKey()
     const char* Expected = "HELLO===========================";
 
     char* NormalizedKey = NormalizeKey(Key);
-    int Passed = Assert(0, "NormalizeKey", TESTLY_EXIT_ON_FAIL,
+    int Passed = Check("NormalizeKey", 0,
         Expected, NormalizedKey,
         "Expected %s, got %s.", Expected, NormalizedKey
     );
@@ -62,8 +62,8 @@ int TestGenerateSecretFromSeed()
     const char* Seed = "0001337000";
     const char* Expected = "30303031333337303030";
 
-    char* SeededSecret = GenerateSecretFromSeed(Seed, strlen(Seed));
-    int Passed = Assert(0, "GenerateSecretFromSeed", TESTLY_EXIT_ON_FAIL,
+    char* SeededSecret = GenerateSecretFromSeed((uint8_t*)Seed, strlen(Seed));
+    int Passed = Check("GenerateSecretFromSeed", 0,
         Expected, SeededSecret,
         "Got %s from seed %s.", SeededSecret, Seed
     );
@@ -83,7 +83,7 @@ int TestGenerateSecret()
     const char* Expected = "42FB9FE059815A8166A1";
 
     char* Secret = GenerateSecret();
-    int Passed = Assert(0, "GenerateSecret", TESTLY_EXIT_ON_FAIL,
+    int Passed = Check("GenerateSecret", 0,
         Expected, Secret,
         "Expected %s, got %s.", Expected, Secret
     );
@@ -146,7 +146,7 @@ int TestGenerateSecretEntropy()
 
     int Expected = -1;
 
-    return Assert(sizeof(int), "FoundCollision", TESTLY_EXIT_ON_FAIL,
+    return Check("FoundCollision", sizeof(int),
         &Expected, &CollisionIndex,
         "Had collision on %i. generation. (Very rare case)", CollisionIndex
     );
@@ -158,7 +158,7 @@ int TestGenerateKeyFromSecret()
     const char* Expected = "IRCUCRCDIFDEKQSBIJCTCMZTG4ZEIRKG";
 
     char* Key = GenerateKeyFromSecret(Secret);
-    int Passed = Assert(0, "GenerateKeyFromSecret", TESTLY_EXIT_ON_FAIL,
+    int Passed = Check("GenerateKeyFromSecret", 0,
         Expected, Key,
         "Expected %s, got %s.", Expected, Key
     );
@@ -178,7 +178,7 @@ int TestGenerateKey()
     const char* Expected = "GQZEMQRZIZCTANJZHAYTKQJYGE3DMQJR";
        
     char* Key = GenerateKey();
-    int Passed = Assert(0, "GenerateKeyFromSecret", TESTLY_EXIT_ON_FAIL,
+    int Passed = Check("GenerateKeyFromSecret", 0,
         Expected, Key,
         "Expected %s, got %s.", Expected, Key
     );

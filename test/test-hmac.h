@@ -28,7 +28,7 @@ int TestTruncateHMAC()
     {
         int Expected = ExpectedHMACs[Index];
         int TruncadedHMAC = TruncateHMAC(Buffer, Index);
-        Passed = Assert(sizeof(int), "TruncateHMAC", TESTLY_EXIT_ON_FAIL, &Expected, &TruncadedHMAC,
+        Passed = Check("TruncateHMAC", sizeof(int), &Expected, &TruncadedHMAC,
             "For %zu digits, expected (%i), got (%i).", Index, Expected, TruncadedHMAC
         );
         if (0 == Passed) break;
@@ -67,7 +67,7 @@ int TestCreateHMAC()
         free(Hex);
     }
 
-    return Assert(SHA_DIGEST_LENGTH, "CreateHMAC", TESTLY_EXIT_ON_FAIL, Buffer, Expected,
+    return Check("CreateHMAC", SHA_DIGEST_LENGTH, Buffer, Expected,
         "Expected (%s), got (%s).", Expected, Buffer
     );
 }

@@ -11,7 +11,7 @@ int TestToByteArray()
     };
 
     ToByteArray(Buffer, Thingy);
-    return Assert(sizeof(Buffer), "TestToByteArray", TESTLY_EXIT_ON_FAIL, Expected, Buffer,
+    return Check("TestToByteArray", sizeof(Buffer), Expected, Buffer,
         "Expected %s, got %s.", Expected, Buffer
     );    
 }
@@ -35,7 +35,7 @@ int TestCalculateHOTP()
         otp_error_t State;
         int HOTP = CalculateHOTP(Key, 0, Digits, &State);
         if (VERBOSE) printf("%s finished with: %s\n", Name, GetErrorName(State));
-        Passed = Assert(sizeof(int), Name, TESTLY_EXIT_ON_FAIL, &Expected, &HOTP,
+        Passed = Check(Name, sizeof(int), &Expected, &HOTP,
             "Expected %i, got %i.", Expected, HOTP
         );
         if (0 == Passed) break;
@@ -64,7 +64,7 @@ int TestVerifyHOTP()
         otp_error_t State;
         int Verified = VerifyHOTP(HOTP, Key, 0, Digits, &State);
         if (VERBOSE) printf("%s finished with: %s\n", Name, GetErrorName(State));
-        Passed = Assert(sizeof(int), Name, TESTLY_EXIT_ON_FAIL, &Expected, &Verified,
+        Passed = Check(Name, sizeof(int), &Expected, &Verified,
             "Expected %i, got %i.", Expected, Verified
         );
         if (0 == Passed) break;
@@ -85,7 +85,7 @@ int TestCalculateTOTP()
     otp_error_t State;
     int TOTP = CalculateTOTP(Key, Timestamp, Interval, Digits, &State);
     if (VERBOSE) printf("%s finished with: %s\n", Name, GetErrorName(State));
-    return Assert(sizeof(int), Name, TESTLY_EXIT_ON_FAIL, &Expected, &TOTP,
+    return Check(Name, sizeof(int), &Expected, &TOTP,
         "Expected %i, got %i.", Expected, TOTP
     );
 }
@@ -103,7 +103,7 @@ int TestVerifyTOTP()
     otp_error_t State;
     int bVerfied = VerifyTOTP(TOTP, Key, Timestamp, Interval, Digits, &State);
     if (VERBOSE) printf("%s finished with: %s\n", Name, GetErrorName(State));
-    return Assert(sizeof(int), Name, TESTLY_EXIT_ON_FAIL, &Expected, &bVerfied,
+    return Check(Name, sizeof(int), &Expected, &bVerfied,
         "Expected %i, got %i.", Expected, bVerfied
     );
 }
@@ -129,7 +129,7 @@ int TestMakeStringFromOTP()
         int OTP = 1;
 
         char* Code = MakeStringFromOTP(OTP, Digits);
-        Passed = Assert(0, "MakeStringFromHOTP", TESTLY_EXIT_ON_FAIL, Expected, Code,
+        Passed = Check("MakeStringFromHOTP", 0, Expected, Code,
             "Expected %s, got %s.", Expected, Code
         );
 
@@ -161,7 +161,7 @@ int TestGenerateAuthURL()
     free(EncodedAccountName);
 
     char* AuthURI = GenerateAuthURI(Type, Key, AccountName, Issuer, Digits, Interval);
-    int Passed = Assert(0, "GenerateAuthURI", TESTLY_EXIT_ON_FAIL, Expected, AuthURI,
+    int Passed = Check("GenerateAuthURI", 0, Expected, AuthURI,
         "Expected %s, got %s.", Expected, AuthURI
     );
 
