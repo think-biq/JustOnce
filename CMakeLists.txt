@@ -8,6 +8,10 @@ set(BUILD_VERSION "${BUILD_MAJOR}.${BUILD_MINOR}.${BUILD_PATCH}")
 
 project (JustOnce VERSION ${BUILD_VERSION})
 
+if (NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE "Release" CACHE PATH "" FORCE)
+endif()
+
 string(
     COMPARE EQUAL
     "${CMAKE_SOURCE_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}"
@@ -26,6 +30,7 @@ target_include_directories(JustOnce PUBLIC
   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/third-party/libbaseencode/src>"
 )
 target_link_libraries(JustOnce ShaOne baseencode)
+
 
 if (JustOnce_WithTest)
 	if (IS_STANDALON_PROJECT)

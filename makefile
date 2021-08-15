@@ -8,6 +8,9 @@ WITH_TEST := 1
 TEST_FLAGS :=  -D JustOnce_WithTest=${WITH_TEST} \
 	-D ShaOne_WithTest=0 \
 	-D Testly_WithTest=0
+BUILD_MODE = Debug # Either Debug or Release
+GRIND = valgrind
+GRIND_OPTS = --show-leak-kinds=all --leak-check=full --track-origins=yes -v
 
 default: all
 
@@ -21,7 +24,7 @@ clean:
 
 prepare:
 	@mkdir -p "$(BUILD_DIR)"
-	@(cd $(BUILD_DIR) && cmake ${TEST_FLAGS} ..)
+	@(cd $(BUILD_DIR) && cmake ${TEST_FLAGS} -D CMAKE_BUILD_TYPE=${BUILD_MODE} ..)
 
 build:
 	@make -C "$(BUILD_DIR)"
@@ -43,3 +46,7 @@ clean-docs:
 build-run: build run-test
 
 all: prepare build-run
+
+grind:
+	mkdir -p log
+	$(GRIND) $(GRIND_OPTS) "$(BUILD_DIR)/./JustOnceTest" > log/debug 2> log/error
