@@ -130,13 +130,11 @@ int VerifyTOTP(int64_t TOTP, const char* Key, int64_t Timestamp,
 /**
 * MakeStringFromOTP
 * 
-* @param Key
-* @param Counter
+* @param OTP
 * @param Digits
-* @param Key
-* @returns HOTP
+* @returns String variant of given OTP with filled prepended zeros.
 */
-char* MakeStringFromOTP(int64_t HTOP, size_t Digits);
+char* MakeStringFromOTP(int64_t OTP, size_t Digits);
 
 /**
 * Generates a URI for usage with external authenticator applications.

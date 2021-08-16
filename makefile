@@ -33,7 +33,7 @@ run-test:
 	@(([ ${WITH_TEST} = 1 ] && [ -f "$(BUILD_DIR)/JustOnceTest" ]) \
 		&& "$(BUILD_DIR)/./JustOnceTest" ) || echo Skipping test ...
 
-docs: clean-docs
+docs: clean-docs icon
 	doxygen docs/doxygen.cfg > docs/doxygen.log 2> docs/doxygen.err.log
 
 open-docs:
@@ -46,6 +46,10 @@ clean-docs:
 build-run: build run-test
 
 all: prepare build-run
+
+icon: prepare
+	convert -background white -fill black \
+	  -size 128x64 -gravity center label:".:* JustOnce *:." "$(PROJECT_DIR)/docs/icon.png"
 
 grind:
 	mkdir -p log
