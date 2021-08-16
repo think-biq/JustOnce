@@ -64,6 +64,17 @@ char* NormalizeKey(const char* Key)
     const int MissingKeyCharacters = RequiredKeyLength - KeyLength;
 
     char* NewKey = NULL;
+
+    if (NULL == Key)
+    {
+        return NewKey;
+    }
+
+    if (0 > MissingKeyCharacters)
+    {
+        return NewKey;
+    }
+
     if (0 < MissingKeyCharacters)
     {
         char Appendix[MissingKeyCharacters];
@@ -73,11 +84,11 @@ char* NormalizeKey(const char* Key)
         }
 
         NewKey = calloc(1, RequiredKeyLength + 1);
-        strcat(NewKey, Key);
-        strcat(NewKey, Appendix);
+        strncpy(NewKey, Key, KeyLength);
+        strncpy(NewKey+KeyLength, Appendix, MissingKeyCharacters);
         NewKey[RequiredKeyLength] = '\0';
     }
-    else //if (0 > MissingKeyCharacters)
+    else
     {        
         NewKey = malloc(RequiredKeyLength + 1);
         strncpy(NewKey, Key, RequiredKeyLength);
