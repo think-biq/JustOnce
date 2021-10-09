@@ -27,6 +27,9 @@ SOFTWARE.
     ^^
 */
 
+#ifndef JUSTONCE_OTP_H_
+#define JUSTONCE_OTP_H_
+
 #include <stdint.h>
 #include <string.h>
 #include <ShaOne/sha.h>
@@ -36,7 +39,7 @@ SOFTWARE.
 	"otpauth://%s/%s?secret=%s&issuer=%s&algorithm=SHA1&digits=%zu&period=%zu"
 
 /** Defining OTP error codes. */
-enum otp_error_t_
+typedef enum
 {
 	OTP_SUCCESS, /**< Operation successful. */
 	OTP_KEY_NULL, /**< Given key was NULL. */
@@ -44,20 +47,14 @@ enum otp_error_t_
 	OTP_KEY_DECODE_ERROR, /**< Could not decode key from base32 string. */
 	OTP_DIGITS_INVALID, /**< Target number of digits invalid. */
 	OTP_HMAC_ERROR /**< Critical error creating HMAC. */
-};
-
-/** OTP error codes. */
-typedef enum otp_error_t_ otp_error_t;
+} otp_error_t;
 
 /** Defining OTP error codes. */
-enum otp_operation_t_
+typedef enum
 {
 	OTP_OP_HOTP,
 	OTP_OP_TOTP	
-};
-
-/** OTP error codes. */
-typedef enum otp_operation_t_ otp_operation_t;
+} otp_operation_t;
 
 
 /**
@@ -130,13 +127,11 @@ int VerifyTOTP(int64_t TOTP, const char* Key, int64_t Timestamp,
 /**
 * MakeStringFromOTP
 * 
-* @param Key
-* @param Counter
+* @param OTP
 * @param Digits
-* @param Key
-* @returns HOTP
+* @returns String variant of given OTP with filled prepended zeros.
 */
-char* MakeStringFromOTP(int64_t HTOP, size_t Digits);
+char* MakeStringFromOTP(int64_t OTP, size_t Digits);
 
 /**
 * Generates a URI for usage with external authenticator applications.
@@ -153,3 +148,5 @@ char* MakeStringFromOTP(int64_t HTOP, size_t Digits);
 */
 char* GenerateAuthURI(otp_operation_t Type, const char* NormalizedKey,
     const char* AccountName, const char* Issuer, size_t Digits, size_t Interval);
+
+#endif
