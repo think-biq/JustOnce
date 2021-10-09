@@ -3,14 +3,15 @@
 FILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 PROJECT_DIR := $(shell dirname $(FILE_PATH))
 PROJECT_NAME := $(notdir $(patsubst %/,%,$(dir $(FILE_PATH))))
-BUILD_DIR := "$(PROJECT_DIR)/staging"
-WITH_TEST := 1
-TEST_FLAGS :=  -D JustOnce_WithTest=${WITH_TEST} \
+BUILD_DIR ?= $(PROJECT_DIR)/staging
+BUILD_MODE ?= Release # Either Debug or Release
+BUILD_SHARED_LIBS ?= ON
+GRIND ?= valgrind
+GRIND_OPTS ?= --show-leak-kinds=all --leak-check=full --track-origins=yes -v
+WITH_TEST ?= 1
+TEST_FLAGS := -D JustOnce_WithTest=${WITH_TEST} \
 	-D ShaOne_WithTest=0 \
 	-D Testly_WithTest=0
-BUILD_MODE = Debug # Either Debug or Release
-GRIND = valgrind
-GRIND_OPTS = --show-leak-kinds=all --leak-check=full --track-origins=yes -v
 
 default: all
 
@@ -24,7 +25,8 @@ clean:
 
 prepare:
 	@mkdir -p "$(BUILD_DIR)"
-	@(cd $(BUILD_DIR) && cmake ${TEST_FLAGS} -D CMAKE_BUILD_TYPE=${BUILD_MODE} ..)
+	@cmake -B $(BUILD_DIR) -D CMAKE_BUILD_TYPE=${BUILD_MODE} \
+		-D BUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} ${TEST_FLAGS} -S $(PROJECT_DIR)
 
 build:
 	@make -C "$(BUILD_DIR)"

@@ -18,12 +18,18 @@ string(
     IS_STANDALON_PROJECT
 )
 
+option(BUILD_SHARED_LIBS "Enable build of shared libraries" NO)
+
 add_subdirectory(lib/ShaOne)
 add_subdirectory(lib/libbaseencode)
 
 file (GLOB JustOnce_SRC
 	"${PROJECT_SOURCE_DIR}/src/**/*.c")
+if(BUILD_SHARED_LIBS)
 add_library(JustOnce SHARED ${JustOnce_SRC})
+else()
+add_library(JustOnce STATIC ${JustOnce_SRC})
+endif()
 target_include_directories(JustOnce PUBLIC
   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>"
   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/lib/ShaOne/src>"
