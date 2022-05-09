@@ -2,13 +2,13 @@
 #include "key.h"
 
 #include "misc.h"
-#include "randolph.h"
 #include <string.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <baseencode.h>
 #include <ShaOne/hash.h>
+#include <carter/randolph.h>
 
 enum KeyDefines_Internal {
     REQUIRED_KEY_LENGTH = 32,

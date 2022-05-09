@@ -7,3 +7,6 @@
 [submodule "lib/testly"]
 	path = lib/testly
 	url = https://github.com/think-biq/testly
+[submodule "lib/carter"]
+	path = lib/carter
+	url = https://github.com/think-biq/carter

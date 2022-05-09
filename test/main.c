@@ -15,9 +15,9 @@
 #include <JustOnce/timing.h>
 #include <JustOnce/key.h>
 #include <JustOnce/misc.h>
-#include <JustOnce/randolph.h>
 
 #include <ShaOne/hash.h>
+#include <carter/randolph.h>
 
 #define VERBOSE 0
 

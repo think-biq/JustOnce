@@ -20,44 +20,12 @@ string(
 
 #
 option(BUILD_SHARED_LIBS "Enable build of shared libraries" NO)
-option(BCRYPT "Switches RNG to Bcrypt" NO)
-
-#
-include(CheckIncludeFile)
-include(CheckSymbolExists)
-check_include_file("bsd/stdlib.h" HAVE_BSD_STDLIB_H)
-if (HAVE_BSD_STDLIB_H)
-message(WARNING "Looking for arc4random in bsd/stdlib.h ...")
-check_symbol_exists(arc4random "bsd/stdlib.h" HAVE_ARC4RANDOM)
-endif()
-if (NOT HAVE_ARC4RANDOM)
-	message(WARNING "Looking for arc4random in stdlib.h ...")
-	check_include_file("stdlib.h" HAVE_STDLIB_H)
-	check_symbol_exists(arc4random "stdlib.h" HAVE_ARC4RANDOM)
-endif()
-if (HAVE_ARC4RANDOM)
-	add_definitions(-DWITH_ARC4RANDOM=1)
-	message(WARNING "System has arc4.")
-else()
-	add_definitions(-DWITH_ARC4RANDOM=0)
-	add_definitions(-DRANDOLPH_DEFINE_ARC4=1)
-	message(WARNING "No arc4 found, will define it later.")
-endif()
-
-#
-if(MSVC)
-	add_definitions(-D_CRT_SECURE_NO_WARNINGS=1)
-	add_definitions(-Dstrdup=_strdup)
-	if(BCRYPT)
-		add_definitions(-DUSE_BCRYPT=1)
-	else()
-		add_definitions(-DUSE_BCRYPT=0)
-	endif()
-endif()
+option(BCRYPT "Switches RNG to Bcrypt" YES)
 
 #
 add_subdirectory(lib/ShaOne)
 add_subdirectory(lib/libbaseencode)
+add_subdirectory(lib/carter)
 
 #
 file (GLOB JustOnce_SRC
@@ -72,20 +40,8 @@ target_include_directories(JustOnce PUBLIC
   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/lib/ShaOne/src>"
   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/lib/libbaseencode/src>"
 )
-
-#
-if(WIN32)
-	find_library(ADVAPI32 advapi32.lib)
-	if(BCRYPT)
-		find_library(BCRYPT bcrypt.lib)
-		set(JustOnce_Libraries ShaOne baseencode ADVAPI32 BCRYPT)
-	else()
-		find_library(CRYPT32 crypt32.li)
-		set(JustOnce_Libraries ShaOne baseencode ADVAPI32 CRYPT32)
-	endif()
-else()
-	set(JustOnce_Libraries ShaOne baseencode)
-endif()
+add_dependencies(JustOnce Carter)
+set(JustOnce_Libraries ShaOne Carter baseencode)
 target_link_libraries(JustOnce ${JustOnce_Libraries})
 set_property(TARGET JustOnce PROPERTY C_STANDARD 11)
 
