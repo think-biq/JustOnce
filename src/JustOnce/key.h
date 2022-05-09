@@ -40,6 +40,8 @@ SOFTWARE.
 */
 void SetRandomizerSafe(int bUseSafe);
 
+int GetRandomizerSafe();
+
 /**
 * Configures seed value to be used by randomizer.
 * 

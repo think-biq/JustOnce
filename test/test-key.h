@@ -1,4 +1,7 @@
 
+enum TestKeyConstants {
+    TestKey_SampleSize = 1000
+};
 
 /// key.h
 
@@ -75,12 +78,17 @@ int TestGenerateSecretFromSeed()
 
 int TestGenerateSecret()
 {
+    int bIsSafe = GetRandomizerSafe();
     // Deactivates crypto safe rand (to be deterministic for tests).
     SetRandomizerSafe(0); 
     // Resets seed to 0.
     SetRandomizerSeed(0);
 
+#if defined(_WIN32)
+    const char* Expected = "2627F6859715AD1DD294";
+#else
     const char* Expected = "42FB9FE059815A8166A1";
+#endif
 
     char* Secret = GenerateSecret();
     int Passed = Check("GenerateSecret", 0,
@@ -90,20 +98,23 @@ int TestGenerateSecret()
 
     free(Secret);
 
+    // Reset randomizer safe state.
+    SetRandomizerSafe(bIsSafe);
+
     return Passed;
 }
 
 int TestGenerateSecretEntropy()
 {
-    // Deactivates crypto safe rand (to be deterministic for tests).
+    int bIsSafe = GetRandomizerSafe();
+    // Activates crypto safe rand.
     SetRandomizerSafe(1); 
-    // Resets seed to 0.
+    // Resets seed to current time.
     SetRandomizerSeed(time(NULL));
 
-    const size_t SampleSize = 1000;
-    char* Collection[SampleSize];
+    char* Collection[TestKey_SampleSize];
 
-    for (size_t Index = 0; Index < SampleSize; ++Index)
+    for (size_t Index = 0; Index < TestKey_SampleSize; ++Index)
     {
         char* Secret = GenerateSecret();
         if (NULL == Secret)
@@ -116,11 +127,13 @@ int TestGenerateSecretEntropy()
         Collection[Index] = Secret;
     }
 
+    SetRandomizerSafe(bIsSafe);
+
     int CollisionIndex = -1;
-    for (size_t Index = 0; Index < SampleSize; ++Index)
+    for (size_t Index = 0; Index < TestKey_SampleSize; ++Index)
     {
         char* Reference = Collection[Index];
-        for (size_t InnerIndex = 0; InnerIndex < SampleSize; ++InnerIndex)
+        for (size_t InnerIndex = 0; InnerIndex < TestKey_SampleSize; ++InnerIndex)
         {
             if (Index == InnerIndex) continue;
 
@@ -139,7 +152,7 @@ int TestGenerateSecretEntropy()
         }
     }
 
-    for (size_t Index = 0; Index < SampleSize; ++Index)
+    for (size_t Index = 0; Index < TestKey_SampleSize; ++Index)
     {
         free(Collection[Index]);
     }
@@ -170,20 +183,27 @@ int TestGenerateKeyFromSecret()
 
 int TestGenerateKey()
 {
+    int bIsSafe = GetRandomizerSafe();
     // Deactivates crypto safe rand (to be deterministic for tests).
     SetRandomizerSafe(0); 
     // Resets seed to 0.
     SetRandomizerSeed(0);
 
+#if defined(_WIN32)
+    const char* Expected = "GI3DEN2GGY4DKOJXGE2UCRBRIRCDEOJU";
+#else
     const char* Expected = "GQZEMQRZIZCTANJZHAYTKQJYGE3DMQJR";
-       
+#endif
+
     char* Key = GenerateKey();
-    int Passed = Check("GenerateKeyFromSecret", 0,
+    int Passed = Check("GenerateKey", 0,
         Expected, Key,
         "Expected %s, got %s.", Expected, Key
     );
 
     free(Key);
+
+    SetRandomizerSafe(bIsSafe);
 
     return Passed;
 }

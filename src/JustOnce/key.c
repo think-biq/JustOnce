@@ -2,6 +2,7 @@
 #include "key.h"
 
 #include "misc.h"
+#include "randolph.h"
 #include <string.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -9,11 +10,22 @@
 #include <baseencode.h>
 #include <ShaOne/hash.h>
 
+enum KeyDefines_Internal {
+    REQUIRED_KEY_LENGTH = 32,
+    REQUIRED_SECRET_LENGTH = 10,
+    MAX_MISSING_CHARACTERS_BUFFER_SIZE = 32
+};
+
 static int Global_bUseSafeRand = 1;
 
 void SetRandomizerSafe(int bUseSafeRand)
 {
     Global_bUseSafeRand = bUseSafeRand;
+}
+
+int GetRandomizerSafe()
+{
+    return Global_bUseSafeRand;
 }
 
 int GetRandomNumber()
@@ -28,7 +40,14 @@ int GetRandomNumberRanged(uint32_t Limit)
 
 void SetRandomizerSeed(int Seed)
 {
-    srand(Seed);
+    if (Global_bUseSafeRand)
+    {
+
+    }
+    else
+    {
+        srand(Seed);
+    }
 }
 
 int IsValidKey(const char* Key)
@@ -59,9 +78,8 @@ int IsValidKey(const char* Key)
 
 char* NormalizeKey(const char* Key)
 {
-    const size_t RequiredKeyLength = 32;
     const size_t KeyLength = strlen(Key);
-    const int MissingKeyCharacters = RequiredKeyLength - KeyLength;
+    const int MissingKeyCharacters = REQUIRED_KEY_LENGTH - KeyLength;
 
     char* NewKey = NULL;
 
@@ -77,22 +95,22 @@ char* NormalizeKey(const char* Key)
 
     if (0 < MissingKeyCharacters)
     {
-        char Appendix[MissingKeyCharacters];
+        char Appendix[MAX_MISSING_CHARACTERS_BUFFER_SIZE] = { 0 };
         for (size_t Index = 0; Index < MissingKeyCharacters; ++Index)
         {
             Appendix[Index] = '=';
         }
 
-        NewKey = calloc(1, RequiredKeyLength + 1);
+        NewKey = calloc(1, REQUIRED_KEY_LENGTH + 1);
         strncpy(NewKey, Key, KeyLength);
         strncpy(NewKey+KeyLength, Appendix, MissingKeyCharacters);
-        NewKey[RequiredKeyLength] = '\0';
+        NewKey[REQUIRED_KEY_LENGTH] = '\0';
     }
     else
     {        
-        NewKey = malloc(RequiredKeyLength + 1);
-        strncpy(NewKey, Key, RequiredKeyLength);
-        NewKey[RequiredKeyLength] = '\0';
+        NewKey = malloc(REQUIRED_KEY_LENGTH + 1);
+        strncpy(NewKey, Key, REQUIRED_KEY_LENGTH);
+        NewKey[REQUIRED_KEY_LENGTH] = '\0';
     }
 
     ToUpperCase(&NewKey);
@@ -125,10 +143,9 @@ char* GenerateSecretFromSeed(const uint8_t* Seed, size_t SeedLength)
 
 char* GenerateSecret()
 {
-    static const int RequiredSize = 10;
-    uint8_t Seed[RequiredSize];
+    uint8_t Seed[REQUIRED_SECRET_LENGTH];
 
-    for (size_t Index = 0; Index < RequiredSize; ++Index)
+    for (size_t Index = 0; Index < REQUIRED_SECRET_LENGTH; ++Index)
     {
         Seed[Index] = GetRandomNumberRanged(256);
     }

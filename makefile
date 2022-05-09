@@ -5,7 +5,7 @@ PROJECT_DIR := $(shell dirname $(FILE_PATH))
 PROJECT_NAME := $(notdir $(patsubst %/,%,$(dir $(FILE_PATH))))
 BUILD_DIR ?= $(PROJECT_DIR)/staging
 BUILD_MODE ?= Release # Either Debug or Release
-BUILD_SHARED_LIBS ?= ON
+BUILD_SHARED_LIBS ?= OFF
 GRIND ?= valgrind
 GRIND_OPTS ?= --show-leak-kinds=all --leak-check=full --track-origins=yes -v
 WITH_TEST ?= 1
@@ -26,10 +26,13 @@ clean:
 prepare:
 	@mkdir -p "$(BUILD_DIR)"
 	@cmake -B $(BUILD_DIR) -D CMAKE_BUILD_TYPE=${BUILD_MODE} \
-		-D BUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} ${TEST_FLAGS} -S $(PROJECT_DIR)
+		-D BUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} ${TEST_FLAGS} \
+		-D JustOnce_WithTest=1 \
+		-D BCRYPT=1 \
+		-S $(PROJECT_DIR)
 
 build:
-	@make -C "$(BUILD_DIR)"
+	@cmake --build $(BUILD_DIR)
 
 run-test:
 	@(([ ${WITH_TEST} = 1 ] && [ -f "$(BUILD_DIR)/JustOnceTest" ]) \
