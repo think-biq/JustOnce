@@ -3,6 +3,10 @@
 FILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 PROJECT_DIR := $(shell dirname $(FILE_PATH))
 PROJECT_NAME := $(notdir $(patsubst %/,%,$(dir $(FILE_PATH))))
+WITH_WINDOWS := 0
+ifeq ($(OS),Windows_NT)
+	WITH_WINDOWS = 1
+endif
 BUILD_DIR ?= $(PROJECT_DIR)/staging
 BUILD_MODE ?= Release # Either Debug or Release
 BUILD_SHARED_LIBS ?= OFF

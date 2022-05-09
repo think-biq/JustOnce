@@ -5,6 +5,9 @@
 #ifndef _H_ARC4_NIX_H_
 #define _H_ARC4_NIX_H_
 
+#include <stdlib.h>
+#include <string.h>
+
 #if !defined(_WIN32)
 #pragma message ( "Going to define randolph for *nix ..." )
 
