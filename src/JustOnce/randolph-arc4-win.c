@@ -34,7 +34,7 @@ randolph_startup(void)
         0
     ));
 #else
-    bGlobal_ProviderRead = CryptAcquireContextA(&Global_Provider,
+    bGlobal_ProviderReady = CryptAcquireContextA(&Global_Provider,
         NULL,
         NULL, //(LPCWSTR)L"Microsoft Base Cryptographic Provider v1.0", // From example.
         PROV_RSA_FULL,
